@@ -95,6 +95,7 @@ const Widget = ({ type }) => {
         <span className="link">{data.link}</span>
       </div>
       <div className="right">
+    
         
         <div className=" ">
 
@@ -102,7 +103,7 @@ const Widget = ({ type }) => {
         {data.icon}
         
       </div>
-      
+     
     </div>
   );
 };

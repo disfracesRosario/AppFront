@@ -36,6 +36,13 @@ const Home = () => {
           <Widget type="order" />
           <Widget type="earning" />
         </div>
+<div className="button2"><button class="learn-more2">
+  <span class="circle" aria-hidden="true">
+  <span class="icon arrow"></span>
+  </span>
+  <span class="button-text"><a href="/nuevopedido">Nuevo Pedido</a></span>
+</button></div>
+        
         <div className="charts"></div>
         <div className="listContainer">
           <div className="listTitle">Vista Previa de Alquileres </div>

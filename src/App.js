@@ -8,11 +8,15 @@ import Single4 from "./pages/single4/Single";
 import Single5 from "./pages/single5/Single";
 import New from "./pages/new/New";
 import New2 from "./pages/new2/New";
+
+
+
 import Nuevafac from "./pages/nuevafac/New";
 import Facturacion from "./pages/facturacion/Facturacion";
 import Disfraces from "./components/disfraces/Disfraces";
 import Histfac from "./pages/histfac/Histfac";
 import Factele from "./pages/factele/Factele";
+import New3 from "./pages/nuevopedido/New";
 
 
 
@@ -32,11 +36,14 @@ function App() {
         <Routes>
           <Route path="/">
             <Route index element={<Home />} />
+
             <Route path="login" element={<Login />} />
             <Route path="facturacion" element={<Facturacion />} />
             <Route path="histfac" element={<Histfac />} />
             <Route path="factele" element={<Factele />} />
             <Route path="disfraces" element={<Disfraces />} />
+            <Route path="nuevopedido" element={<New3 />} />
+            
 
             <Route path="users">
 
@@ -65,6 +72,12 @@ function App() {
                 element={<New2 inputs={userInputs2} title="Agregar Disfraz Nuevo" />}
               />
             </Route>
+
+
+
+            
+
+
 
 
             <Route path="single3">
