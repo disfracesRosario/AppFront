@@ -1,0 +1,18 @@
+button {
+    background-color: rgba(0, 255, 0, 0.644);
+    size: 20px;
+    height: 50px;
+    width: 150px;
+    border: 5px solid rgb(0, 0, 0);
+    font-size: 20px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  }
+  
+  button:hover {
+    background-color: rgb(72, 255, 0);
+    border-radius: 20%;
+    outline-color: rgb(0, 255, 13);
+    box-shadow: -3px -3px 15px rgb(0, 255, 0);
+    transition: 0.1s;
+    transition-property: box-shadow;
+  }

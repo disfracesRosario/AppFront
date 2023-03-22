@@ -1,171 +1,39 @@
-import "./single.scss";
-import { useState } from 'react';
-import Sidebar from '../../components/sidebar/Sidebar';
-import Navbar from '../../components/navbar/Navbar';
-import List2 from '../../components/lista1/Table';
-import { Download } from "@mui/icons-material";
+import * as React from 'react';
+import { styled } from '@mui/joy/styles';
+import Sheet from '@mui/joy/Sheet';
+import Grid from '@mui/joy/Grid';
 
-const Single = () => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [details, setDetails] = useState({
-    name: 'Jane Doe',
-    email: 'janedoe@gmail.com',
-    phone: '+1 2345 67 89',
-    address: 'Elton St. 234 Garden Yd. NewYork',
-    document: 'USA',
-    joinDate: '01/01/2021',
-    costumeRented: 'Pirate',
-    pickupDate: '01/02/2021',
-    returnDate: '01/05/2021',
-    status: 'Returned'
-  });
-  const handleEditClick = () => setIsEditing(!isEditing);
+const Item = styled(Sheet)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: "black",
+  backgroundColor: "#e7e7e7"
+}));
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setDetails({ ...details, [name]: value });
-  }
-
-  const handleSaveClick = () => {
-    // Send details to server
-  }
+export default function BasicGrid() {
   return (
-    <div className="single">
-     
-      <div className="singleContainer">
-       
-        <div className="top">
-          <div className="left">
-           
-            {isEditing && (
-          <div className="editButtons">
-            
-            <div className="saveButton" onClick={handleSaveClick}>Guardar</div>
-          </div>
-        )}
-
-         
-            <div className="item">
-              <div className="details">
-               
-                <div className="detailItem">
-
-                  <div className="detailItem">
-                    <span className="itemKey">ID:</span>
-                    <span className="itemValue">
-                      {isEditing ? (
-                        <input type="text" name="id" value={details.id} onChange={handleInputChange} />
-                      ) : (
-                        details.id
-                      )}
-                    </span>
-                  </div>
-
-                  <span className="itemKey">Email:</span>
-                  <span className="itemValue">
-                      {isEditing ? (
-                        <input type="text" name="email" value={details.email} onChange={handleInputChange} />
-                      ) : (
-                        details.email
-                      )}
-                    </span>
-                </div>
-                <div className="detailItem">
-            <span className="itemKey">Telefono:</span>
-            <span className="itemValue">
-              {isEditing ? (
-                <input type="text" name="phone" value={details.phone} onChange={handleInputChange} />
-              ) : (
-                details.phone
-              )}
-            </span>
-          </div>
-
-          <div className="detailItem">
-            <span className="itemKey">Direccion:</span>
-            <span className="itemValue">
-              {isEditing ? (
-                <input type="text" name="adress" value={details.adress} onChange={handleInputChange} />
-              ) : (
-                details.adress
-              )}
-            </span>
-          </div>
-
-  
-                <div className="detailItem">
-                  <span className="itemKey">N° Documento:</span>
-                  <span className="itemValue">
-              {isEditing ? (
-                <input type="text" name="dni" value={details.dni} onChange={handleInputChange} />
-              ) : (
-                details.dni
-              )}
-            </span>
-
-                </div>
-                <div className="detailItem">
-                  <span className="itemKey">Fecha de Alta:</span>
-                  <span className="itemValue">
-              {isEditing ? (
-                <input type="text" name="alta" value={details.alta} onChange={handleInputChange} />
-              ) : (
-                details.alta
-              )}
-            </span>
-                </div>
-
-                <div className="detailItem">
-                  <span className="itemKey">Disfraz Alquilado:</span>
-                  <span className="itemValue">
-              {isEditing ? (
-                <input type="text" name="disalq" value={details.disalq} onChange={handleInputChange} />
-              ) : (
-                details.disalq
-              )}
-            </span>
-
-                </div>
-                <div className="detailItem">
-                  <span className="itemKey">Fecha de Retiro:</span>
-                  <span className="itemValue">
-              {isEditing ? (
-                <input type="text" name="retiro" value={details.retiro} onChange={handleInputChange} />
-              ) : (
-                details.retiro
-              )}
-            </span>
-                </div>
-    
-                <div className="detailItem">
-                  <span className="itemKey">Fecha de Entrega:</span>
-                  <span className="itemValue">
-              {isEditing ? (
-                <input type="text" name="entrega" value={details.entrega} onChange={handleInputChange} />
-              ) : (
-                details.entrega
-              )}
-            </span>
-                </div>
-                <div className="detailItem">
-            <span className="itemKey">Estatus:</span>
-            <span className="itemValue">
-              {isEditing ? (
-                <input type="text" name="status" value={details.status} onChange={handleInputChange} />
-              ) : (
-                details.status
-              )}
-            </span>
-          </div>
-              </div>
-            </div>
-          </div>
-        </div>
-     
-       
-      </div>
+    <div className='tabla'>
+    <Grid container spacing={2} sx={{ flexGrow: 1 }} >
+      <Grid xs={1}>
+        <Item>DNI</Item>
+      </Grid>
+      <Grid xs={1}>
+        <Item>Nombre</Item>
+      </Grid>
+      <Grid xs={1}>
+        <Item>Apellido</Item>
+      </Grid>
+      <Grid xs={2}>
+        <Item>Tipo Cliente</Item>
+      </Grid>
+      <Grid xs={1}>
+        <Item>Texto 31424</Item>
+      </Grid>
+      <Grid xs={1}>
+        <Item>texto asascasc</Item>
+      </Grid>
+    </Grid>
     </div>
   );
-};
-
-export default Single;
+}

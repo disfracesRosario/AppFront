@@ -1,15 +1,26 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns, userRows } from "../../datatablesource";
+import { userColumns } from "../../datatablesource";
+import UserTable, { userRows } from "../../datatablesource";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect  } from "react";
+
 
 const Datatable = () => {
-  const [data, setData] = useState(userRows);
+  
+  const [data, setData] = useState([]);
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      const rows = await userRows();
+      setData(rows);
+    };
+    fetchData();
+  }, []);
+
 
   const actionColumn = [
     {
@@ -55,5 +66,7 @@ const Datatable = () => {
     </div>
   );
 };
+
+
 
 export default Datatable;

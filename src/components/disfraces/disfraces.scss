@@ -107,7 +107,7 @@
       cursor: pointer;
     }
   }
-  button {
+  .boton3 {
    
     display: flex;
     height: 3em;
@@ -123,19 +123,19 @@
     background: #fff;
    }
    
-   button > svg {
+   .boton3 > svg {
     margin-right: 5px;
     margin-left: 5px;
     font-size: 20px;
     transition: all 0.4s ease-in;
    }
    
-   button:hover > svg {
+   .boton3:hover > svg {
     font-size: 1.2em;
     transform: translateX(-5px);
    }
    
-   button:hover {
+   .boton3:hover {
     box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #ffffff;
     transform: translateY(-2px);
    }
@@ -147,13 +147,13 @@
     
   }
    
-    button {
+  .boton3 {
       height: 2em;
       width: 70px;
       font-size: 12px;
     }
     
-    button > svg {
+    .boton3 > svg {
       font-size: 14px;
     }
   }

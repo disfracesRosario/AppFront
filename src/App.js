@@ -1,6 +1,7 @@
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import List from "./pages/list/List";
+import Usuarios from "./components/datatable/Datatable";
 import Single from "./pages/single/Single";
 import Single2 from "./pages/single2/Single"
 import Single3 from "./pages/single3/Single";
@@ -39,6 +40,7 @@ function App() {
 
             <Route path="login" element={<Login />} />
             <Route path="facturacion" element={<Facturacion />} />
+            <Route path="usuarios" element={<Usuarios />} />
             <Route path="histfac" element={<Histfac />} />
             <Route path="factele" element={<Factele />} />
             <Route path="disfraces" element={<Disfraces />} />
