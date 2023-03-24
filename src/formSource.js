@@ -1,30 +1,35 @@
 export const userInputs = [
     {
       id: 1,
+      field: "adress",
       label: "Direccion",
       type: "text",
       placeholder: "Ingresar Direccion",
     },
     {
       id: 2,
+      field: "name",
       label: "Nombre",
       type: "text",
       placeholder: "Ingresar Nombre",
     },
     {
       id: 3,
+      field:"documentNumber",
       label: "N° de Documento",
       type: "mail",
       placeholder: "Ingresar N° de Documento",
     },
     {
       id: 4,
+      field:"lastName",
       label: "Apellido",
       type: "text",
       placeholder: "Ingresar Apellido",
     },
     {
       id: 5,
+      field:"type",
       label: "Tipo de Cliente",
       type: "text",
       placeholder: " Ingresar Tipo de Cliente",
@@ -32,6 +37,7 @@ export const userInputs = [
     {
       id: 6,
       label: "Telefono",
+      field:"phone",
       type: "text",
       placeholder: "Ingresar Telefono",
     },

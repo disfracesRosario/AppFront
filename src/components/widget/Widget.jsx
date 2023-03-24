@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./widget.scss";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
@@ -6,11 +7,12 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
-
+import { Link } from "react-router-dom";
 
 const Widget = ({ type }) => {
   let data;
-
+  
+  const [amount2, setAmount2] = useState(200);
 
   //temporary
   const amount = 100;
@@ -21,8 +23,11 @@ const Widget = ({ type }) => {
     case "user":
       data = {
         title: "FACTURACION ELECTRONICA",
-        isMoney: false,
-        link: <div><button><a href="/factele">Ver Detalles</a></button></div>,
+        isMoney: true,
+        link: 
+            <Link to="/factele" style={{ textDecoration: "none" }}>
+            <button>Ver Detalles</button>
+        </Link>,
         icon: (
           <PersonOutlinedIcon
             className="icon"
@@ -34,22 +39,27 @@ const Widget = ({ type }) => {
         ),
       };
       break;
-    case "order":
-      data = {
-        title: "LIMITE",
-        isMoney: false,
-        link: <div><button><a href="">Modificar</a></button></div>,
-        icon: (
-          <ShoppingCartOutlinedIcon
-            className="icon"
-            style={{
-              backgroundColor: "rgba(255, 0, 0, 0.2)",
-              color: "red",
-            }}
-          />
-        ),
-      };
-      break;
+      case "order":
+  data = {
+    title: "LIMITE",
+    isMoney: true,
+    link: (
+      <div>
+        <button onClick={() => setAmount2(amount2 + diff)}>Modificar</button>
+      </div>
+    ),
+    icon: (
+      <ShoppingCartOutlinedIcon
+        className="icon"
+        style={{
+          backgroundColor: "rgba(255, 0, 0, 0.2)",
+          color: "red",
+        }}
+      />
+    ),
+  };
+  break;
+
     case "earning":
       data = {
         title: "RESTO PARA FACTURAR",
@@ -88,10 +98,8 @@ const Widget = ({ type }) => {
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
-          {data.isMoney && "$"} {amount}
+          {data.isMoney && "$"} {type === "order" ? amount2 : amount}
         </span>
-     
-       
         <span className="link">{data.link}</span>
       </div>
       <div className="right">

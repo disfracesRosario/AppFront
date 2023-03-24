@@ -24,7 +24,6 @@ const List = () => {
       customer: "John Smith",
       date: "1 Marzo",
       amount: 785,
-      method: "Efectivo",
       status: "Pending",
     },
     {
@@ -34,7 +33,6 @@ const List = () => {
       customer: "Michael Doe",
       date: "1 March",
       amount: 900,
-      method: "Online Payment",
       status: "Pending",
     },
     {
@@ -44,7 +42,6 @@ const List = () => {
       customer: "John Smith",
       date: "1 March",
       amount: 35,
-      method: "Cash on Delivery",
       status: "Pending",
     },
     {
@@ -54,7 +51,6 @@ const List = () => {
       customer: "Jane Smith",
       date: "1 March",
       amount: 920,
-      method: "Online",
       status: "Approved",
     },
  
@@ -88,10 +84,10 @@ const List = () => {
               <TableCell className="tableCell">ID</TableCell>
               <TableCell className="tableCell">Disfraz</TableCell>
               <TableCell className="tableCell">Nombre del Disfraz</TableCell>
+              <TableCell className="tableCell">Detalle</TableCell>
               <TableCell className="tableCell">Cliente</TableCell>
               <TableCell className="tableCell">Fecha de Retiro</TableCell>
               <TableCell className="tableCell">Fecha de Entrega</TableCell>
-              <TableCell className="tableCell">Metodo de Pago</TableCell>
               <TableCell className="tableCell">Estatus</TableCell>
             </TableRow>
           </TableHead>

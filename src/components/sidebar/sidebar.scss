@@ -4,6 +4,11 @@
   min-height: 100vh;
   background-color: white;
 
+  @media (max-width: 1366px) {
+    .logo{
+     color: #333;
+    }
+     }
   .top {
     height: 50px;
     display: flex;
@@ -95,9 +100,14 @@
 }
 
 
+@media screen and (max-width: 1366px) {
+  .logo{
+    color: beige;
+  }
+}
 
 
-@media screen and (max-width: 768px) {
+@media screen and (min-width: 768px) {
   .sidebar {
     flex: 1;
     border-right: 0.5px solid #6439ff;
@@ -117,6 +127,8 @@
         color: #ffffff;
       }
     }
+  }
+}
   
     hr {
       height: 0;
@@ -190,17 +202,10 @@
             }
         }
     }
-}
+
 .hidden {
   display: none;
 }
 
-}
-@media screen and (max-width: 1370px) {
-  .logo {
-    font-size: 10px;
-    font-weight: bold;
-    color: #ffffff;
-  }
 
-}
+

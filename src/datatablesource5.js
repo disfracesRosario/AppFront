@@ -3,7 +3,7 @@ export const userColumns = [
     {
       field: "user",
       headerName: "ID",
-      width: 150,
+      width: 80,
       renderCell: (params) => {
         return (
           <div className="">
@@ -17,12 +17,12 @@ export const userColumns = [
       
       field: "monto",
       headerName: "Monto",
-      width: 180,
+      width: 150,
     },
     {
       field: "fecha",
       headerName: "Fecha",
-      width: 180,
+      width: 110,
     },
     {
       field: "tipodepago",

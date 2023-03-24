@@ -18,6 +18,7 @@ const Single = () => {
     returnDate: '01/05/2021',
     status: 'Returned'
   });
+  
   const handleEditClick = () => setIsEditing(!isEditing);
 
   const handleInputChange = (event) => {

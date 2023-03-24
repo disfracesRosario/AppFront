@@ -7,6 +7,7 @@ import Featured from "../../components/featured/Featured";
 import Chart from "../../components/chart/Chart";
 import Table from "../../components/table/Table";
 import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -40,7 +41,9 @@ const Home = () => {
   <span class="circle" aria-hidden="true">
   <span class="icon arrow"></span>
   </span>
-  <span class="button-text"><a href="/nuevopedido">Nuevo Pedido</a></span>
+  <Link to="/nuevopedido" style={{ textDecoration: "none" }}>
+  <span class="button-text">Nuevo Pedido</span>
+          </Link>
 </button></div>
         
         <div className="charts"></div>

@@ -30,7 +30,7 @@ const New = ({ inputs, title }) => {
             <form>
               <div className="formInput">
                 <label htmlFor="file">
-                  Image: <DriveFolderUploadOutlinedIcon className="icon" />
+                  Imagen: <DriveFolderUploadOutlinedIcon className="icon" />
                 </label>
                 <input
                   type="file"
@@ -46,7 +46,7 @@ const New = ({ inputs, title }) => {
                   <input type={input.type} placeholder={input.placeholder} />
                 </div>
               ))}
-              <button>Send</button>
+              <button>Agregar</button>
             </form>
           </div>
         </div>

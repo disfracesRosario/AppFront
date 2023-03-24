@@ -159,13 +159,36 @@
     }
   }
 
-   @media (max-width: 860px) {
-    .datatable {
-      height: auto;
-      padding: 10px;
-    }
+
     
   }
+  @media (max-width: 1366px) {
+  .bar{
+    width: 15%;
+  }
+  .info-cliente{
+    width: 120%;
+  }    
+  }
+  @media (max-width: 700px ) {
+    .bar{
+     width: 50%;
+    }
+    .info-cliente{
+      width: 160%;
+    }
+    .info{
+      display: flex;
+      flex-direction: column;
+      .calendario{
+        padding-right: 45%;
+      }
+    }
+    .botones{
+      display: flex;
+      flex-direction: column;
+      
+    }
    
   }
 
