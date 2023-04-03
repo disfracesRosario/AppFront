@@ -80,6 +80,15 @@ function App() {
             
 
 
+            <Route path="single2">
+
+              <Route index element={<Single2 />} />
+
+              <Route path=":userId" element={<Single2 />} />
+
+
+            </Route>
+
 
 
             <Route path="single3">

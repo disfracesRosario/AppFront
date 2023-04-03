@@ -3,23 +3,35 @@ import * as React from 'react';
 import { DataGrid } from "@mui/x-data-grid";
 import { userColumns, userRows } from "../../datatablesource2";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from '@mui/joy';
 import Single6 from "../single6/Single";
 import Button from '@mui/joy/Button';
 import Calendario from "../calendario/Calendario";
 import Check from "../check/Check";
+import BasicGrid from "../../pages/single6/Single";
+import Disfraces from "../disfraces2/Disfraces";
+import axios from 'axios';
 
 
-const Datatable = () => {
-  const [data, setData] = useState(userRows);
+const Datatable = ({ singleId }) => {
+  const [selectedDni, setSelectedDni] = useState(null);
+  const [selectedClient, setSelectedClient] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
+  const [amount, setAmount] = useState('');
+  const [type, setType] = useState('');
+  const [clientId, setClientId] = useState('');
+  const [costumeIds, setCostumeIds] = useState([]);
+  const [reservationDate, setReservationDate] = useState('');
+  const [deadline, setDeadline] = useState('');
+  const [checkIn, setCheckIn] = useState([]);
+
 
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
   };
-
-
+  const [data, setData] = useState(userRows);
 
   const actionColumn = [
     {
@@ -44,70 +56,87 @@ const Datatable = () => {
     },
   ];
 
+  const handleAccept = () => {
+    const data = {
+      amount,
+      type,
+      clientId,
+      costumeIds,
+      reservationDate,
+      deadline,
+      checkIn
+    };
+
+    axios.post('https://disfraces-production.up.railway.app/transactions/newTransaction', data)
+      .then(response => {
+        console.log(response.data);
+        // Aquí puedes hacer algo con la respuesta, como redirigir a otra página
+      })
+      .catch(error => {
+        console.error(error);
+        // Aquí puedes manejar el error de alguna manera
+      });
+  };
+
+  const handleImageUrlChange = (url) => {
+    setImageUrl(url);
+  };
+
   return (
     <div className="datatable">
       <button>
         <a href="/">Volver</a>
       </button>
-
-
-      <div className="bar"> <Input
-        color="info"
-        disabled={false}
-        placeholder="Escribir Dni"
-        size="lg"
-        variant="outlined"
-      />
-        <Button variant="outlined">Aceptar</Button>
-      </div>
       <div className="info-cliente">
-        <Single6 />
+        <BasicGrid id={selectedDni} onImageUrlChange={handleImageUrlChange} />
       </div>
-      <DataGrid
-        className="datagrid"
-        rows={data}
-        columns={userColumns.concat(actionColumn)}
-        pageSize={15}
-        rowsPerPageOptions={[15]}
-        checkboxSelection
-        rowHeight={140} />
-
+      <div className="tabla">
+        <Disfraces onCostumeIdsChange={setCostumeIds}></Disfraces></div>
 
       <div className="info">
         <div className="calendario">
-          <Calendario />
+          <Calendario value={reservationDate} onChange={setReservationDate} />
+          <Calendario value={deadline} onChange={setDeadline} />
         </div>
-        <img src="https://cloudfront-us-east-1.images.arcpublishing.com/infobae/2AYDKWFWUBG7VNZ24CJVPHHOWI.jpg" alt="" />
       </div>
-
-
-
-
 
       <div className="botones">
         <Input
           color="info"
           placeholder="Monto"
           variant="soft"
-        />   <Input
-          color="info"
-          placeholder="Detalle"
-          variant="outlined"
+          value={amount}
+          onChange={(event) => setAmount(event.target.value)}
         />
-        <input type="text" name="tipo_de_dato" />
-        <input type="text" name="tipo_de_dato" />
-        <input type="text" name="tipo_de_dato" />
+        <Input
+          color="info"
+          placeholder="Tipo"
+          variant="outlined"
+          value={type}
+          onChange={(event) => setType(event.target.value)}
+        />
       </div>
 
       <div className="check">
-        <Check /> Banco
-        <Check /> Remito
+        <Check checked={checkIn.includes('Banco')} onChange={(event) => {
+          if (event.target.checked) {
+            setCheckIn([...checkIn, 'Banco']);
+          } else {
+            setCheckIn(checkIn.filter(item => item !== 'Banco'));
+          }
+        }} /> Banco
+        <Check checked={checkIn.includes('Remito')} onChange={(event) => {
+          if (event.target.checked) {
+            setCheckIn([...checkIn, 'Remito']);
+          } else {
+            setCheckIn(checkIn.filter(item => item !== 'Remito'));
+          }
+        }} /> Remito
       </div>
       <div className="final">
-        <button>Aceptar</button>
+        <Button onClick={handleAccept}>Aceptar</Button>
       </div>
     </div>
-
   );
 };
 

@@ -4,10 +4,11 @@ import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUpload
 import { useState } from "react";
 import axios from "axios";
 import "./new.scss";
-import { CloudinaryUploadWidget } from 'react-cloudinary-upload-widget';
+import { CloudinaryContext, Image, Transformation } from 'cloudinary-react';
 
 const New = ({ inputs, title, apiUrl }) => {
   const [file, setFile] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     lastName: "",
@@ -18,16 +19,32 @@ const New = ({ inputs, title, apiUrl }) => {
     image: "",
   });
 
-  const [imageUrl, setImageUrl] = useState("");
-
-  const handleImageUpload = (result) => {
-    setImageUrl(result.info.secure_url);
+  const handleImageUpload = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "qarsntph"); // Reemplaza "tu_upload_preset" con el nombre de tu upload preset en Cloudinary
+    try {
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/dkzil7l5p/image/upload", // Reemplaza "tu_cloud_name" con el nombre de tu cloud name en Cloudinary
+        formData
+      );
+      setFormData({ ...formData, image: res.data.secure_url }); // Actualiza el estado del formulario con la URL de la imagen subida
+    } catch (err) {
+      console.error(err);
+    }
   };
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    setImagePreview(URL.createObjectURL(e.target.files[0]));
+     // Actualiza la vista previa de la imagen
+  };
+
 
   // Maneja el envío del formulario.
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = { ...formData, image: imageUrl };
     axios
       .post("https://disfraces-production.up.railway.app/clients/newClient", JSON.stringify(formData), {
         headers: {
@@ -71,23 +88,19 @@ const New = ({ inputs, title, apiUrl }) => {
             <form onSubmit={handleSubmit}>
               <div className="formInput">
                 <label htmlFor="image">Imagen:</label>
-                <CloudinaryUploadWidget
-                  folder="clientes"
-                  cropping
-                  onSuccess={handleImageUpload}
-                  resourceType="image"
-                  cloudName="yourCloudName"
-                  uploadPreset="yourUploadPreset"
-                  buttonText="Cargar imagen"
-                />
+             
                 <input
-                  type="image" // Cambiar a tipo text
-                  placeholder="Ingrese la URL de la imagen"
+                  type="file" // Cambia el tipo de entrada a "file"
                   name="image"
-                  onChange={handleInputChange}
+                  onChange={handleFileChange} // Maneja la selección de archivos
                 />
+                   <button type="submit" className="submitButton" onClick={handleImageUpload}>
+                  Subir imagen
+                </button>
+                {imagePreview && (
+                  <img src={imagePreview} alt="Vista previa de la imagen" /> // Muestra la vista previa de la imagen
+                )}
               </div>
-
               <div className="formInput">
                 <label htmlFor="name">Nombre:</label>
                 <input

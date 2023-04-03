@@ -1,11 +1,68 @@
-import "./new.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState } from "react";
+import axios from "axios";
+import "./new.scss";
+import { CloudinaryContext, Image, Transformation } from 'cloudinary-react';
 
-const New = ({ inputs, title }) => {
+const New = ({ inputs, title, apiUrl }) => {
   const [file, setFile] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    lastName: "",
+    adress: "",
+    documentNumber: "",
+    type: "",
+    phone: "",
+    image: "",
+  });
+
+  const handleImageUpload = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "qarsntph"); // Reemplaza "tu_upload_preset" con el nombre de tu upload preset en Cloudinary
+    try {
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/dkzil7l5p/image/upload", // Reemplaza "tu_cloud_name" con el nombre de tu cloud name en Cloudinary
+        formData
+      );
+      setFormData({ ...formData, image: res.data.secure_url }); // Actualiza el estado del formulario con la URL de la imagen subida
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    setImagePreview(URL.createObjectURL(e.target.files[0])); // Actualiza la vista previa de la imagen
+  };
+
+
+  // Maneja el envío del formulario.
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post("https://disfraces-production.up.railway.app/costumes/newCostume", JSON.stringify(formData), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+
+  // Maneja el cambio de los campos de entrada del formulario.
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   return (
     <div className="new">
@@ -27,26 +84,56 @@ const New = ({ inputs, title }) => {
             />
           </div>
           <div className="right">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="formInput">
-                <label htmlFor="file">
-                  Imagen: <DriveFolderUploadOutlinedIcon className="icon" />
-                </label>
+                <label htmlFor="image">Imagen:</label>
+             
                 <input
-                  type="file"
-                  id="file"
-                  onChange={(e) => setFile(e.target.files[0])}
-                  style={{ display: "none" }}
+                  type="file" // Cambia el tipo de entrada a "file"
+                  name="image"
+                  onChange={handleFileChange} // Maneja la selección de archivos
+                />
+                   <button type="submit" className="submitButton" onClick={handleImageUpload}>
+                  Subir imagen
+                </button>
+                {imagePreview && (
+                  <img src={imagePreview} alt="Vista previa de la imagen" /> // Muestra la vista previa de la imagen
+                )}
+              </div>
+              <div className="formInput">
+                <label htmlFor="name">Nombre:</label>
+                <input
+                  type="text"
+                  placeholder="Ingrese el nombre"
+                  name="name"
+                  onChange={handleInputChange}
                 />
               </div>
 
-              {inputs.map((input) => (
-                <div className="formInput" key={input.id}>
-                  <label>{input.label}</label>
-                  <input type={input.type} placeholder={input.placeholder} />
-                </div>
-              ))}
-              <button>Agregar</button>
+              <div className="formInput">
+                <label htmlFor="colour">Color:</label>
+                <input
+                  type="text"
+                  placeholder="Ingrese el Color"
+                  name="colour"
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="formInput">
+                <label htmlFor="detail">Detalle:</label>
+                <input
+                  type="text"
+                  placeholder="Ingrese su dirección"
+                  name="detail"
+                  onChange={handleInputChange}
+                />
+              </div>
+
+
+              <button type="submit" className="submitButton">
+                Guardar
+              </button>
             </form>
           </div>
         </div>
@@ -54,5 +141,4 @@ const New = ({ inputs, title }) => {
     </div>
   );
 };
-
 export default New;

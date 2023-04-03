@@ -1,5 +1,7 @@
 .home {
   display: flex;
+  background-color: #f6f2ff;
+
 
 
 .learn-more2{
@@ -123,55 +125,8 @@
         margin-bottom: 15px;
       }
     }
-    @media screen and (max-width: 768px) {
-      
-      .widgets,
-      .charts {
-        flex-direction: column;
-        padding: 10px;
-        gap: 10px;
-      }
+   
 
-      .charts {
-        padding: 5px 10px;
-      }
-
-      .listContainer {
-        margin: 10px;
-        padding: 10px;
-      }
-      .sidebar {
-        display: none;
-      }
-    
-    }
-
-    @media screen and (max-width: 480px) {
-      .widgets,
-      .charts {
-       
-        padding: 5px;
-        gap: 5px;
-      }
-      
-     
-      .charts {
-        padding: 5px;
-      }
-
-      .listContainer {
-
-        margin: 5px;
-        padding: 5px;
-      }
-
-      .listTitle {
-        font-size: 25px;
-      }
-      .sidebar {
-        display: none;
-      }
-    }
   }
   
 .toggleSidebarButton {
@@ -236,3 +191,48 @@
 
 
 }
+
+/* Estilos para dispositivos móviles */
+@media screen and (max-width: 760px) {
+  .homeContainer {
+    /* Cambiar el ancho de los widgets y las gráficas */
+    .widgets,
+    .charts {
+      padding: 5px;
+      gap: 5px;
+    }
+    /* Cambiar el ancho de las gráficas */
+    .charts {
+      padding: 5px;
+    }
+    /* Cambiar los márgenes de la lista */
+    .listContainer {
+      margin: 5px;
+      padding: 5px;
+    }
+    /* Cambiar el tamaño de la fuente del título de la lista */
+    .listTitle {
+      font-size: 25px;
+    }
+    /* Ocultar la barra lateral */
+    .sidebar {
+      display: none;
+    }
+  }
+  /* Cambiar el margen izquierdo del botón de toggle de la barra lateral */
+  .toggleSidebarButton {
+    left: 10px;
+  }
+  /* Ajustar los estilos del botón de hamburguesa */
+  .hamburger-label {
+    margin-top: 5px;
+    height: 20px;
+  }
+  .hamburger-label div {
+    width: 40px;
+    height: 4px;
+    margin: 6px 0;
+  }
+}
+
+
