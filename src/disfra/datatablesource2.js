@@ -1,3 +1,4 @@
+import "./data.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
@@ -6,7 +7,8 @@ export const userColumns = [
   {
     field: "name",
     headerName: "Nombre",
-    width: 290,
+
+    cellClassName: "name-cell",
     renderCell: (params) => {
       return (
         <div className="image-container">
@@ -74,6 +76,7 @@ export async function userRows() {
     const response = await axios.get(
       "https://disfraces-production.up.railway.app/costumes"
     );
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log(error);

@@ -76,6 +76,7 @@ const Single = () => {
         <Navbar />
         <div className="top">
           <div className="left">
+            <div className='datos'>
             <div className="editButton" onClick={handleEditClick}>
               {isEditing ? 'Terminar' : 'Editar'}
             </div>
@@ -168,12 +169,12 @@ const Single = () => {
                     )}
                   </span>
                 </div>
-                
+                </div>
               </div>
             </div>
           </div>
           <div className="dni">
-            <img src={details.image} alt="" width="500px" height="400px" />
+            <img src={details.image} alt="" width="650px" height="500px" />
           </div>
         </div>
         <div className="bottom">

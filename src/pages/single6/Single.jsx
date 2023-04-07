@@ -1,3 +1,4 @@
+import "./single.scss";
 import * as React from 'react';
 import { styled } from '@mui/joy/styles';
 import Sheet from '@mui/joy/Sheet';
@@ -7,7 +8,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from '@mui/joy/Button';
 
-
 const Item = styled(Sheet)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -16,17 +16,18 @@ const Item = styled(Sheet)(({ theme }) => ({
   backgroundColor: "#e7e7e7"
 }));
 
-export default function BasicGrid({ onImageUrlChange }) {
+export default function BasicGrid({ onImageUrlChange, onIdChange }) {
+  const [documentNumber, setDocumentNumber] = useState('');
   const [clientData, setClientData] = useState(null);
-  const [id, setDni] = useState('');
+  const [id, setId] = useState('');
   const [imageUrl, setImageUrl] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://disfraces-production.up.railway.app/clients/${id}`);
-        setClientData(response.data)
-        console.log(response.data);
+        const response = await axios.get(`https://disfraces-production.up.railway.app/clients/document/${documentNumber}`);
+        setClientData(response.data);
+  
 
         const imageUrl = response.data.imageUrl;
         if (imageUrl) {
@@ -36,60 +37,78 @@ export default function BasicGrid({ onImageUrlChange }) {
             onImageUrlChange(imageUrl);
           }
         }
+
+        // Set the client ID
+        setId(response.data.id);
+        if (onIdChange) {
+          onIdChange(response.data.id);
+        }
+
       } catch (error) {
         console.error(error);
       }
     };
 
-    if (id) {
+    if (documentNumber) {
       fetchData();
     }
-  },  [id, onImageUrlChange]);
+  }, [documentNumber, onImageUrlChange, onIdChange]);
 
   const handleDniChange = (event) => {
-    setDni(event.target.value);
+    setDocumentNumber(event.target.value);
+  };
+
+  const handleIdChange = (event) => {
+    setId(event.target.value);
   };
 
   const handleSearch = () => {
     setClientData(null); // Reset clientData to null
-    setImageUrl(''); // Reset imageUrl to empty string
-    setDni(id); // Set documentNumber state
+    setImageUrl(null); // Reset imageUrl to null
   };
 
   return (
     <div className='tabla'>
       <Grid container spacing={2} sx={{ flexGrow: 1 }}>
         <Grid xs={1}>
-          <Item>{clientData ? clientData.documentNumber : ''}</Item>
+          <Item>Id: {clientData ? clientData.id : ''}</Item>
+        </Grid>
+        <Grid xs={2}>
+          <Item>Nombre: {clientData ? clientData.name : ''}</Item>
         </Grid>
         <Grid xs={1}>
-          <Item>{clientData ? clientData.name : ''}</Item>
+          <Item>Apellido: {clientData ? clientData.lastName : ''}</Item>
         </Grid>
         <Grid xs={1}>
-          <Item>{clientData ? clientData.lastName : ''}</Item>
+          <Item>Tipo: {clientData ? clientData.type : ''}</Item>
         </Grid>
-        <Grid xs={1}>
-          <Item>{clientData ? clientData.type : ''}</Item>
-        </Grid>
-        <img src={clientData?.image} alt="" />
-
+        <img style={{ maxWidth: '600px', maxHeight: '400px' }}  src={clientData?.image} alt="" />
       </Grid>
 
       <div className="bar">
         <Input
           color="info"
           type="text"
-          placeholder="Escribir ID cliente"
-          value={id}
+          placeholder="Escribir DNI cliente"
           onChange={handleDniChange}
         />
-      
+        
       </div>
+
       {imageUrl && (
         <div className="image">
-          <img src={clientData.image} alt="Client image" />
+          <img src={clientData.image} alt="Client image"style={{ maxWidth: '600px', maxHeight: '400px' }}  />
         </div>
       )}
+
+      <div className="bar">
+        <Input
+          color="info"
+          type="text"
+          value={id}
+          onChange={handleIdChange}
+        />
+      </div>
     </div>
   );
 }

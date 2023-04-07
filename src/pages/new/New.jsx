@@ -82,6 +82,7 @@ const New = ({ inputs, title, apiUrl }) => {
                   : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
               }
               alt=""
+              style={{ maxWidth: "500px", maxHeight: "400px" }} 
             />
           </div>
           <div className="right">
@@ -94,11 +95,11 @@ const New = ({ inputs, title, apiUrl }) => {
                   name="image"
                   onChange={handleFileChange} // Maneja la selección de archivos
                 />
-                   <button type="submit" className="submitButton" onClick={handleImageUpload}>
+                   <button type="submit" className="submitButton" onClick={handleImageUpload} >
                   Subir imagen
                 </button>
                 {imagePreview && (
-                  <img src={imagePreview} alt="Vista previa de la imagen" /> // Muestra la vista previa de la imagen
+                  <img src={imagePreview} alt="Vista previa de la imagen"   style={{ maxWidth: "500px", maxHeight: "400px" }} /> // Muestra la vista previa de la imagen
                 )}
               </div>
               <div className="formInput">

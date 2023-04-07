@@ -49,7 +49,7 @@ const Home = () => {
         <div className="charts"></div>
         <div className="listContainer">
           <div className="listTitle">Vista Previa de Alquileres </div>
-          <Table />
+         
         </div>
       </div>
     </div>

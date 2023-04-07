@@ -8,10 +8,13 @@ import { Input } from '@mui/joy';
 import Single6 from "../single6/Single";
 import Button from '@mui/joy/Button';
 import Calendario from "../calendario/Calendario";
-import Check from "../check/Check";
 import BasicGrid from "../../pages/single6/Single";
 import Disfraces from "../disfraces2/Disfraces";
 import axios from 'axios';
+import Check from "../check/Check";
+import { DatePicker, Space } from 'antd';
+
+
 
 
 const Datatable = ({ singleId }) => {
@@ -22,9 +25,11 @@ const Datatable = ({ singleId }) => {
   const [type, setType] = useState('');
   const [clientId, setClientId] = useState('');
   const [costumeIds, setCostumeIds] = useState([]);
+  const [checkIn, setCheckIn] = useState([]);
+  const [id, setId] = useState('');
   const [reservationDate, setReservationDate] = useState('');
   const [deadline, setDeadline] = useState('');
-  const [checkIn, setCheckIn] = useState([]);
+
 
 
 
@@ -56,6 +61,20 @@ const Datatable = ({ singleId }) => {
     },
   ];
 
+  const handleCheckInChange = (name, checked) => {
+    if (checked) {
+      setCheckIn([...checkIn, name]);
+    } else {
+      setCheckIn(checkIn.filter((item) => item !== name));
+    }
+  };
+
+
+
+  const onCostumeSelect = (id) => {
+    setCostumeIds((prevIds) => [...prevIds, id]);
+  };
+
   const handleAccept = () => {
     const data = {
       amount,
@@ -64,9 +83,9 @@ const Datatable = ({ singleId }) => {
       costumeIds,
       reservationDate,
       deadline,
-      checkIn
+      checkIn: checkIn.join(',') // Convertir el array a un string separado por comas
     };
-
+  
     axios.post('https://disfraces-production.up.railway.app/transactions/newTransaction', data)
       .then(response => {
         console.log(response.data);
@@ -78,9 +97,27 @@ const Datatable = ({ singleId }) => {
       });
   };
 
-  const handleImageUrlChange = (url) => {
+  const handleImageUrlChange = (url, clientIdValue) => {
     setImageUrl(url);
+    setClientId(clientIdValue);
   };
+  const handleSelect = (ids) => {
+    onCostumeSelect(ids);
+  };
+  const handleSelectionChange = (selection) => {
+    const selectedIds = selection.map((selectedRow) => selectedRow.id);
+    handleSelect(selectedIds);
+  };
+  
+
+  const handleIdChange = (id) => {
+    setClientId(id);
+  };
+  const handleCostumeSelect = (id) => {
+    setCostumeIds([id]); // Actualizar el valor de costumeIds
+  };
+
+
 
   return (
     <div className="datatable">
@@ -88,25 +125,40 @@ const Datatable = ({ singleId }) => {
         <a href="/">Volver</a>
       </button>
       <div className="info-cliente">
-        <BasicGrid id={selectedDni} onImageUrlChange={handleImageUrlChange} />
+        <BasicGrid onImageUrlChange={handleImageUrlChange} onIdChange={handleIdChange} />
+      </div>
+      <div className="id">
       </div>
       <div className="tabla">
-        <Disfraces onCostumeIdsChange={setCostumeIds}></Disfraces></div>
-
+        <Disfraces onCostumeSelect={handleCostumeSelect} />
+        <Input
+          color="info"
+          placeholder="IDs de disfraces (separados por comas)"
+          variant="outlined"
+          value={costumeIds.join(',')}
+          onChange={(event) => {
+            const ids = event.target.value.split(',').map((id) => id.trim());
+            setCostumeIds(ids);
+          }}
+        />
+      </div>
       <div className="info">
         <div className="calendario">
-          <Calendario value={reservationDate} onChange={setReservationDate} />
-          <Calendario value={deadline} onChange={setDeadline} />
+          <Calendario
+            reservationDate={reservationDate}
+            setReservationDate={setReservationDate}
+            deadline={deadline}
+            setDeadline={setDeadline}
+          />
         </div>
       </div>
-
       <div className="botones">
         <Input
           color="info"
           placeholder="Monto"
           variant="soft"
           value={amount}
-          onChange={(event) => setAmount(event.target.value)}
+          onChange={(event) => setAmount(Number(event.target.value))}
         />
         <Input
           color="info"
@@ -118,21 +170,12 @@ const Datatable = ({ singleId }) => {
       </div>
 
       <div className="check">
-        <Check checked={checkIn.includes('Banco')} onChange={(event) => {
-          if (event.target.checked) {
-            setCheckIn([...checkIn, 'Banco']);
-          } else {
-            setCheckIn(checkIn.filter(item => item !== 'Banco'));
-          }
-        }} /> Banco
-        <Check checked={checkIn.includes('Remito')} onChange={(event) => {
-          if (event.target.checked) {
-            setCheckIn([...checkIn, 'Remito']);
-          } else {
-            setCheckIn(checkIn.filter(item => item !== 'Remito'));
-          }
-        }} /> Remito
+        <div className="check">
+          <Check name="Banco" onCheckInChange={handleCheckInChange} />
+          <Check name="Remito" onCheckInChange={handleCheckInChange} />
+        </div>
       </div>
+
       <div className="final">
         <Button onClick={handleAccept}>Aceptar</Button>
       </div>

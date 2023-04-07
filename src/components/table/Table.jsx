@@ -47,6 +47,7 @@ const List = () => {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
+              <TableCell>Imagen</TableCell>
               <TableCell>Nombre del Disfraz</TableCell>
               <TableCell>Detalle</TableCell>
               <TableCell>Cliente</TableCell>
@@ -59,6 +60,7 @@ const List = () => {
             {filteredRows.map((row) => (
               <TableRow key={row.id}>
                 <TableCell>{row.id}</TableCell>
+                <TableCell><img src={row.image} alt={row.name} style={{width: 100, height: 100}}/></TableCell>
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.detail}</TableCell>
                 <TableCell>{row.clientRented || "-"}</TableCell>

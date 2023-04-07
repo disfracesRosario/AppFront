@@ -1,7 +1,7 @@
 import "./disfraces.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { userColumns } from "../../datatablesource2";
-import UserTable, { userRows } from "../../datatablesource2";
+import UserTable, { userRows } from "../../disfra/datatablesource2";
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect  } from "react";
 import axios from "axios";
@@ -74,6 +74,7 @@ const Datatable = () => {
         pageSize={8}
         rowsPerPageOptions={[8]}
         checkboxSelection
+        rowHeight={140}
         autoHeight
       />
     </div>
