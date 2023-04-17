@@ -1,22 +1,35 @@
+import React, { useState, useEffect } from "react";
 import "./disfraces.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { userColumns } from "../../datatablesource2";
 import UserTable, { userRows } from "../../disfra/datatablesource2";
 import { Link, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
 import axios from "axios";
 
 const Datatable2 = ({ onCostumeSelect }) => {
   const [data, setData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedCostumeIds, setSelectedCostumeIds] = useState([]);
 
   const handleSelect = (id) => {
+    // Añadir la ID seleccionada a la lista de IDs previamente seleccionadas
+    const updatedIds = [...selectedCostumeIds, id];
+    setSelectedCostumeIds(updatedIds);
     onCostumeSelect(id);
+
+    // Mostrar las IDs que se van sumando en la consola
+    console.log(`IDs seleccionadas: ${updatedIds.join(", ")}`);
   };
 
   const handleSelectionChange = (selection) => {
-    if (selection.length > 0) {
-      handleSelect(selection[0]);
+    setSelectedRows(selection);
+  };
+
+  const handleSelectButtonClick = (params) => {
+    // Obtener la ID del disfraz seleccionado en la fila de la tabla
+    const costumeId = params.getValue(params.id, "id");
+    if (costumeId) {
+      handleSelect(costumeId);
     }
   };
 
@@ -30,20 +43,45 @@ const Datatable2 = ({ onCostumeSelect }) => {
     fetchData();
   }, [id]);
 
-  
+  const CustomSelectButton = (params) => {
+    return (
+      <button
+        className="selectButton"
+        onClick={() => handleSelectButtonClick(params)}
+      >
+        Seleccionar
+      </button>
+    );
+  };
+  const handleCostumeSelect = (id) => {
+    // Añadir la ID seleccionada a la lista de IDs previamente seleccionadas
+    const updatedIds = [...selectedCostumeIds, id];
+    setSelectedCostumeIds(updatedIds);
+  };
+
   return (
     <div className="datatable">
       <div className="tableWrapper">
         <DataGrid
           className="datagrid"
           rows={data}
-          columns={userColumns}
+          columns={[
+            ...userColumns,
+            {
+              field: "selectButton",
+              headerName: "Seleccionar",
+              width: 120,
+              renderCell: CustomSelectButton,
+            },
+          ]}
           pageSize={8}
           rowsPerPageOptions={[8]}
           checkboxSelection
           autoHeight
           rowHeight={130}
-          onSelectionModelChange={handleSelectionChange} // Agregar el evento onSelectionModelChange
+          onSelectionModelChange={(newSelectionModel) => {
+            setSelectedRows(newSelectionModel);
+          }}
         />
       </div>
     </div>

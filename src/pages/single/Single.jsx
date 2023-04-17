@@ -180,7 +180,9 @@ const Single = () => {
         <div className="bottom">
           <h1 className="title">Historial de Alquileres</h1>
         </div>
-        <Table></Table>
+        <div className="tabla">
+          <Table></Table>
+        </div>
       </div>
     </div>
   );

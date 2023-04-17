@@ -2,6 +2,8 @@ import "./data.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
+import TextField from "@mui/material/TextField";
+
 
 export const userColumns = [
   {
@@ -52,8 +54,11 @@ export const userColumns = [
   },
 ];
 
+
+
 export function UserTable() {
   const [userRows, setUserRows] = useState([]);
+  const [searchValue, setSearchValue] = useState(""); 
 
   useEffect(() => {
     async function fetchData() {
@@ -63,13 +68,31 @@ export function UserTable() {
     fetchData();
   }, []);
 
+  const handleSearchChange = (e) => {
+    setSearchValue(e.target.value);
+  };
+  
+  const filteredData = userRows.filter((row) => {
+    const costumeName = row.name.toLowerCase();
+    return costumeName.includes(searchValue.toLowerCase());
+  });
+
+
   return (
     <div>
       <h1>Tabla de usuarios</h1>
-      <DataGrid rows={userRows} columns={userColumns} />
+      <TextField
+        label="Buscar disfraces"
+        variant="outlined"
+        value={searchValue}
+        onChange={handleSearchChange}
+        fullWidth
+      />
+      <DataGrid rows={filteredData} columns={userColumns} />
     </div>
   );
 }
+
 
 export async function userRows() {
   try {

@@ -31,6 +31,8 @@ const Datatable = () => {
     };
     fetchData();
   }, [id]);
+  
+
 
   const actionColumn = [
     {
