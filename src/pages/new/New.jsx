@@ -6,7 +6,7 @@ import axios from "axios";
 import "./new.scss";
 import { CloudinaryContext, Image, Transformation } from 'cloudinary-react';
 import React, { useRef } from 'react';
-import QrReader from "../../components/readerqr/QrReader";
+
 
 const New = ({ inputs, title, apiUrl }) => {
 
@@ -104,7 +104,7 @@ const New = ({ inputs, title, apiUrl }) => {
               }}
             />
           </div>
-          <QrReader></QrReader>
+      
           <div className="right">
             <form onSubmit={handleSubmit}>
               <div className="formInput">

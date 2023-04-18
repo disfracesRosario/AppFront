@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import List2 from '../../components/lista1/Table';
-import "./single1.scss";
+import "./single.scss";
 import Table from "../table/Table";
 
 

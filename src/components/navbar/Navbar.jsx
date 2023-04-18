@@ -20,12 +20,7 @@ const Navbar = () => {
         <div className="">
         </div>
         <div className="items">
-          <div className="item">
-            <DarkModeOutlinedIcon
-              className="icon"
-              onClick={() => dispatch({ type: "TOGGLE" })}
-            />
-          </div>
+      
    
         </div>
       </div>
