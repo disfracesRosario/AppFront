@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 import "./widget.scss";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
@@ -13,11 +13,24 @@ const Widget = ({ type }) => {
   let data;
   
   const [amount2, setAmount2] = useState(200);
+  const [number, setNumber] = useState(null);
+
+  useEffect(() => {
+    const fetchLimit = async () => {
+      try {
+        const response = await fetch("https://disfraces.onrender.com/configs/limit");
+        const data = await response.json();
+        setNumber(data.limit);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchLimit();
+  }, []);
 
   //temporary
   const amount = 100;
   const diff = 20;
-
 
   switch (type) {
     case "user":
@@ -39,7 +52,10 @@ const Widget = ({ type }) => {
         ),
       };
       break;
+
+      
       case "order":
+
   data = {
     title: "LIMITE",
     isMoney: true,
@@ -92,6 +108,7 @@ const Widget = ({ type }) => {
     default:
       break;
   }
+
 
   return (
     <div className="widget">

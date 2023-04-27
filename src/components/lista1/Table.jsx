@@ -23,7 +23,7 @@ const List2 = () => {
 
   useEffect(() => {
     axios
-      .get(`https://disfraces-production.up.railway.app/clients/7/history`)
+      .get(`https://disfraces.onrender.com/costumes/clients/7/history`)
       .then((response) => {
         console.log(response.data);
         setRows(response.data.transactions); // Extracts the array of the "transactions" property
