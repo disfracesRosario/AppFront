@@ -19,29 +19,35 @@ const List = () => {
     setSearchText(newSearchText);
   }
 
-  function checkDeadline(deadlineDate) {
-  const today = new Date();
-  const deadline = new Date(deadlineDate);
-  const isDeadlinePassed = today > deadline;
 
-  if (isDeadlinePassed && !hasShownDeadlineAlert) {
-    alert("¡Hay disfraces que han pasado su fecha límite!");
-    setHasShownDeadlineAlert(true);
-  } else if (
-    !isDeadlinePassed &&
-    Math.abs(deadline - today) / (1000 * 60 * 60 * 24) <= 2 &&
-    !hasShownTwoDayAlert
-  ) {
-    alert("¡Hay disfraces que deben retirarse en los próximos dos días!");
-    setHasShownTwoDayAlert(true);
+  function checkDeadline(deadlineDate) {
+    if (!deadlineDate) {
+      return "-";
+    }
+
+    const today = new Date();
+    const deadline = new Date(deadlineDate);
+    const isDeadlinePassed = today > deadline;
+
+    if (isDeadlinePassed && !hasShownDeadlineAlert) {
+      alert("¡Hay disfraces que han pasado su fecha límite!");
+      setHasShownDeadlineAlert(true);
+    } else if (
+      !isDeadlinePassed &&
+      Math.abs(deadline - today) / (1000 * 60 * 60 * 24) <= 2 &&
+      !hasShownTwoDayAlert
+    ) {
+      alert("¡Hay disfraces que deben retirarse en los próximos dos días!");
+      setHasShownTwoDayAlert(true);
+    }
+
+    return (
+      <span style={{ color: isDeadlinePassed ? "red" : "black" }}>
+        {deadline.toLocaleDateString()}
+      </span>
+    );
   }
 
-  return (
-    <span style={{ color: isDeadlinePassed ? "red" : "black" }}>
-      {deadline.toLocaleDateString()}
-    </span>
-  );
-}
 
 
   useEffect(() => {
@@ -99,7 +105,7 @@ const List = () => {
                 <TableCell>{row.clientRented || "-"}</TableCell>
                 <TableCell>{checkDeadline(row.reservationDate)}</TableCell>
                 <TableCell>{checkDeadline(row.deadlineDate)}</TableCell>
-                <TableCell>
+                <TableCell style={{ color: row.costumeStatus === 'ALQUILADO' ? 'green' : row.costumeStatus === 'RESERVADO' ? 'blue' : 'goldenrod' }}>
                   <span className={`status ${row.costumeStatus}`}>
                     {row.costumeStatus}
                   </span>
