@@ -89,7 +89,9 @@ const New = ({ inputs, title, apiUrl }) => {
         <div className="top">
           <h1>{title}</h1>
         </div>
+        <div className="dni">
         <Dni></Dni>
+        </div>
         <div className="bottom">
           <div className="left">
             <img

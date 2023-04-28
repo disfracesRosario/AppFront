@@ -1,3 +1,4 @@
+import "./dni.scss";
 import React, { useState, useEffect } from "react";
 import {
   BrowserMultiFormatReader,
