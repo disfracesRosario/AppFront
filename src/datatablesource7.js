@@ -39,7 +39,7 @@ export function UserTable() {
 
   useEffect(() => {
     axios
-      .get("https://disfraces.onrender.com/clients")
+      .get("https://disfracesrosario.up.railway.app/clients")
       .then((response) => setUserRows(response.data))
       .catch((error) => console.log(error));
   }, []);
@@ -54,7 +54,7 @@ export function UserTable() {
 
 export async function userRows() {
   try {
-    const response = await axios.get('https://disfraces.onrender.com/clients');
+    const response = await axios.get('https://disfracesrosario.up.railway.app/clients');
     return response.data;
   } catch (error) {
     console.log(error);

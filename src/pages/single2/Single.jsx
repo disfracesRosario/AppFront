@@ -26,7 +26,7 @@ const id = url.split("/").pop();// Obtener la id de la URL actual
   useEffect(() => {
     async function fetchData() {
       console.log(id)
-      const response = await fetch(`https://disfraces.onrender.com/costumes/${id}`);
+      const response = await fetch(`https://disfracesrosario.up.railway.app/costumes/${id}`);
       const data = await response.json();
       setDetails(data);
     }

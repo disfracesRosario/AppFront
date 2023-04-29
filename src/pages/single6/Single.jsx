@@ -32,7 +32,7 @@ export default function BasicGrid({ onImageUrlChange, onIdChange }) {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`https://disfraces.onrender.com/clients/document/${documentNumber}`);
+      const response = await axios.get(`https://disfracesrosario.up.railway.app/clients/document/${documentNumber}`);
       setClientData(response.data);
 
       const imageUrl = response.data.imageUrl;

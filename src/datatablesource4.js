@@ -106,7 +106,7 @@ export function UserTable() {
 export async function userRows() {
   try {
     const response = await axios.get(
-      "https://disfraces.onrender.com/transactions/currentMonth"
+      "https://disfracesrosario.up.railway.app/transactions/currentMonth"
     );
     return response.data;
   } catch (error) {

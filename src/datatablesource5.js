@@ -50,7 +50,7 @@ export const userColumns = [
 ];
 
 // obtener datos de la API y actualizar userRows
-fetch('https://disfraces.onrender.com/transactions')
+fetch('https://disfracesrosario.up.railway.app/transactions')
   .then(response => response.json())
   .then(data => {
     const newData = data.map((item, index) => ({
@@ -72,7 +72,7 @@ fetch('https://disfraces.onrender.com/transactions')
 export const userRows = [];
 
 // Fetch data from API
-fetch('https://disfraces.onrender.com/transactions')
+fetch('https://disfracesrosario.up.railway.app/transactions')
   .then(response => response.json())
   .then(data => {
     // Process data and assign to userRows

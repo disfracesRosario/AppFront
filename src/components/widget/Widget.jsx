@@ -15,7 +15,7 @@ const Widget = ({ type }) => {
   const [amount2, setAmount2] = useState(null);
   const [number, setNumber] = useState(null);
   const [newLimit, setNewLimit] = useState(null); // Nuevo límite ingresado por el usuario
-
+  const [totalElectronic, setTotalElectronic] = useState(null); // Total de facturación electrónica
 
   const handleInputChange = (event) => {
     setNumber(event.target.value);
@@ -24,7 +24,7 @@ const Widget = ({ type }) => {
   useEffect(() => {
     const fetchLimit = async () => {
       try {
-        const response = await fetch("https://disfraces.onrender.com/configs/limite");
+        const response = await fetch("https://disfracesrosario.up.railway.app/configs/limite");
         const data = await response.json();
         setNumber(data); // Establecer el valor del estado 'number' con el valor obtenido de la API
       } catch (error) {
@@ -32,12 +32,23 @@ const Widget = ({ type }) => {
       }
     };
     fetchLimit();
+
+    const fetchTotalElectronic = async () => {
+      try {
+        const response = await fetch("https://disfracesrosario.up.railway.app/transactions/totalsMain");
+        const data = await response.json();
+        setTotalElectronic(data.totalElectronic);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTotalElectronic();
   }, []);
 
   const updateLimit = async (newLimit) => {
     try {
       const response = await fetch(
-        `https://disfraces.onrender.com/configs/limite?limite=${newLimit}`,
+        `https://disfracesrosario.up.railway.app/configs/limite?limite=${newLimit}`,
         {
           method: "PUT",
         }
@@ -50,6 +61,9 @@ const Widget = ({ type }) => {
     }
   };
 
+
+
+  //temporary
   //temporary
   const amount = 100;
   const diff = 20;
@@ -59,10 +73,7 @@ const Widget = ({ type }) => {
       data = {
         title: "FACTURACION ELECTRONICA",
         isMoney: true,
-        link:
-          <Link to="/factele" style={{ textDecoration: "none" }}>
-            <button>Ver Detalles</button>
-          </Link>,
+        link: "",
         icon: (
           <PersonOutlinedIcon
             className="icon"
@@ -72,9 +83,9 @@ const Widget = ({ type }) => {
             }}
           />
         ),
+        value: totalElectronic, // Agrega esta línea para mostrar el valor de facturación electrónica
       };
       break;
-
 
     case "order":
       data = {
@@ -83,22 +94,22 @@ const Widget = ({ type }) => {
         link: (
           <div>
             <TextField
-  id="outlined-number"
-  type="number"
-  InputLabelProps={{
-    shrink: true,
-  }}
-  variant="outlined"
-  value={number}
-  onChange={(event) => setNumber(event.target.value)}
-  InputProps={{
-    style: {
-      fontSize: '0.8rem', // ajusta el tamaño del texto
-      height: '30px',// ajusta la altura del TextField
-      backgroundColor: '#42231'
-    }
-  }}
-/>
+              id="outlined-number"
+              type="number"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="outlined"
+              value={number}
+              onChange={(event) => setNumber(event.target.value)}
+              InputProps={{
+                style: {
+                  fontSize: '0.8rem', // ajusta el tamaño del texto
+                  height: '30px',// ajusta la altura del TextField
+                  backgroundColor: '#42231'
+                }
+              }}
+            />
 
             <Button onClick={() => updateLimit(number)}>Modificar</Button>
           </div>
@@ -128,22 +139,6 @@ const Widget = ({ type }) => {
         ),
       };
       break;
-    case "balance":
-      data = {
-        title: "BALANCE",
-        isMoney: true,
-        link: "See details",
-        icon: (
-          <AccountBalanceWalletOutlinedIcon
-            className="icon"
-            style={{
-              backgroundColor: "rgba(128, 0, 128, 0.2)",
-              color: "purple",
-            }}
-          />
-        ),
-      };
-      break;
     default:
       break;
   }
@@ -153,8 +148,7 @@ const Widget = ({ type }) => {
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
-          {data.isMoney && "$"} {type === "order" ? (amount2 !== null ? amount2 : number) : amount}
-
+          {data.isMoney && "$"} {type === "order" ? (amount2 !== null ? amount2 : number) : data.value}
         </span>
         <span className="link">{data.link}</span>
       </div>
@@ -164,7 +158,6 @@ const Widget = ({ type }) => {
       </div>
     </div>
   );
-
 };
 
 export default Widget;

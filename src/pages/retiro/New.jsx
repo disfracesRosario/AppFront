@@ -88,7 +88,7 @@ const Datatable = ({ singleId, onTransactionIdChange, onIdChange, onTransactionI
       totalPayment: isPaid ? true : isOwedMoney ? false : null,
     };
     // Realizar la petición PUT a la URL especificada con los datos obtenidos
-    fetch(`https://disfraces.onrender.com/costumes/return`, {
+    fetch(`https://disfracesrosario.up.railway.app/costumes/return`, {
       method: 'PUT',
       body: JSON.stringify(data),
       headers: {

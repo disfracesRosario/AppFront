@@ -58,7 +58,7 @@ const New = ({ inputs, title, apiUrl }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://disfraces.onrender.com/clients/newClient", JSON.stringify(formData), {
+      .post("https://disfracesrosario.up.railway.app/clients/newClient", JSON.stringify(formData), {
         headers: {
           "Content-Type": "application/json", 'Access-Control-Allow-Origin': '*'
         },

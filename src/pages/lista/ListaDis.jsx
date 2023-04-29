@@ -12,7 +12,7 @@ function ClientHistory() {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(
-        `https://disfraces.onrender.com/costumes/${id}/history`
+        `https://disfracesrosario.up.railway.app/costumes/${id}/history`
       );
       setClientData(result.data);
     };

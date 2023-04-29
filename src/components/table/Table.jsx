@@ -51,7 +51,7 @@ const List = () => {
 
 
   useEffect(() => {
-    fetch("https://disfraces.onrender.com/costumes")
+    fetch("https://disfracesrosario.up.railway.app/costumes")
       .then((response) => response.json())
       .then((data) => setData(data));
   }, []);

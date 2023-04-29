@@ -12,7 +12,7 @@ const Featured = () => {
   const [totals, setTotals] = useState(0);
 
   useEffect(() => {
-    fetch('https://disfraces.onrender.com/transactions/totalsMain')
+    fetch('https://disfracesrosario.up.railway.app/transactions/totalsMain')
       .then(response => response.json())
       .then(data => setTotals(data.totals));
   }, []);

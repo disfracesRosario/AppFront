@@ -26,7 +26,7 @@ const Single2 = () => {
   useEffect(() => {
     async function fetchData() {
       console.log(id)
-      const response = await fetch(`https://disfraces.onrender.com/transactions/${id}`);
+      const response = await fetch(`https://disfracesrosario.up.railway.app/transactions/${id}`);
       const data = await response.json();
       setDetails(data);
     }

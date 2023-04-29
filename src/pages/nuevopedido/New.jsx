@@ -123,7 +123,7 @@ const Datatable = ({ singleId }) => {
     };
 
     setPartialPaymentAmount(amount - partialPaymentAmount);
-    axios.post('https://disfraces.onrender.com/transactions/newTransaction', data)
+    axios.post('https://disfracesrosario.up.railway.app/transactions/newTransaction', data)
       .then(response => {
         console.log(response.data);
         // Aquí puedes hacer algo con la respuesta, como redirigir a otra página
