@@ -23,6 +23,7 @@ export default function () {
   hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
   hints.set(DecodeHintType.TRY_HARDER, true);
   const codeReader = new BrowserMultiFormatReader(hints);
+  const [formattedCode, setFormattedCode] = useState("");
 
   console.log("ZXing code reader initialized");
 
@@ -48,6 +49,20 @@ export default function () {
       setVideoInputDevices(videoInputDevices);
     }
   }
+  useEffect(() => {
+    const sourceSelect = document.getElementById("sourceSelect");
+
+    if (sourceSelect) {
+      codeReader
+        .getVideoInputDevices()
+        .then((videoInputDevices) => {
+          setupDevices(videoInputDevices);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, []);
 
   function resetClick() {
     codeReader.reset();
@@ -60,14 +75,35 @@ export default function () {
       selectedDeviceId,
       "video",
       (result, err) => {
+
         if (result) {
-          // properly decoded qr code
-          console.log("Found QR code!", result);
-          console.log("test")
-          alert(result.text);
-   
-          // Aquí se muestra el texto decodificado en la página
-          document.getElementById("result").innerHTML = result.text;
+          const data = result.text.split("@");
+          const numeroDeTramite = data[0];
+          const apellido = data[1];
+          const nombre = data[2];
+          const sexo = data[3];
+          const dni = data[4];
+          const fechaNacimiento = data[6];
+          const fechaEmision = data[7];
+          const cuil = data[8];
+          const c1 = cuil.substring(0,2);
+          const c2 = cuil.slice(-1);
+          const comb = c1+c2+dni
+
+          const formattedData = `
+          Nombre: ${nombre}
+          Apellido: ${apellido}
+          DNI: ${dni}
+          Fecha de nacimiento: ${fechaNacimiento}
+          Fecha de emisión: ${fechaEmision}
+          Numero de tramite:${numeroDeTramite}
+          Sexo:${sexo}
+          Cuil/Cuit : ${comb}
+        `;
+          setFormattedCode(formattedData);
+          setFormattedCode(formattedData);
+          setCode(formattedData);
+          alert(formattedData);
         }
         
         if (err) {
@@ -78,7 +114,7 @@ export default function () {
     );
   }
 
-  useEffect((deviceId) => {
+  useEffect(() => {
     decodeContinuously(selectedDeviceId);
     console.log(`Started decode from camera with id ${selectedDeviceId}`);
   }, []);
@@ -106,9 +142,9 @@ export default function () {
           <video id="video" width="100%" height="360px" />
         </div>
   
-        <label>Result:<p>{code.text}</p></label>
+        <label>Result: {formattedCode}</label>
         <pre>
-          <code id="result">{code}</code>
+          <code>{formattedCode}</code>
         </pre>
   
         <button id="resetButton" onClick={() => resetClick()}>
