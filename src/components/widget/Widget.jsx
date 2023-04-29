@@ -16,6 +16,8 @@ const Widget = ({ type }) => {
   const [number, setNumber] = useState(null);
   const [newLimit, setNewLimit] = useState(null); // Nuevo límite ingresado por el usuario
   const [totalElectronic, setTotalElectronic] = useState(null); // Total de facturación electrónica
+  const [rest, setRest] = useState(null); // Total de facturación electrónica
+
 
   const handleInputChange = (event) => {
     setNumber(event.target.value);
@@ -43,7 +45,21 @@ const Widget = ({ type }) => {
       }
     };
     fetchTotalElectronic();
+
+    const fetchRest = async () => {
+      try {
+        const response = await fetch("https://disfracesrosario.up.railway.app/transactions/totalsMain");
+        const data = await response.json();
+        console.log("rest: ", rest);
+        setRest(data.rest);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchRest();
   }, []);
+
+  
 
   const updateLimit = async (newLimit) => {
     try {
@@ -126,19 +142,21 @@ const Widget = ({ type }) => {
       };
       break;
 
-    case "earning":
-      data = {
-        title: "RESTO PARA FACTURAR",
-        isMoney: true,
-        link: "",
-        icon: (
-          <MonetizationOnOutlinedIcon
-            className="icon"
-            style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
-          />
-        ),
-      };
-      break;
+      case "earning":
+        data = {
+          title: "RESTO PARA FACTURAR",
+          isMoney: true,
+          link: "",
+          icon: (
+            <MonetizationOnOutlinedIcon
+              className="icon"
+              style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
+            />
+          ),
+        
+          value: rest !== null ? rest : number,
+        };
+        break;
     default:
       break;
   }
