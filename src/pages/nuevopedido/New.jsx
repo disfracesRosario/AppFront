@@ -78,7 +78,12 @@ const Datatable = ({ singleId }) => {
       setCheckIn(checkIn.filter((item) => item !== name));
     }
   };
-
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("partialPayment", e.target.elements.partialPayment.value);
+    // enviar formData al servidor
+  };
 
   const [error, setError] = useState(null);
 
@@ -99,47 +104,37 @@ const Datatable = ({ singleId }) => {
   };
 
   const handleAccept = () => {
+  const selectedRowsData = selectedRows.map((rowId) =>
+    data.find((row) => row.id === rowId)
+  );
+  const selectedIds = selectedRowsData.map((row) => row.id);
+  const partialPaymentAmount = partialPayment ? Number(partialPayment) : 0;
 
-    // Obtener las filas seleccionadas del estado
-    const selectedRowsData = selectedRows.map((rowId) =>
-      data.find((row) => row.id === rowId)
-    );
-
-    // Obtener las IDs seleccionadas de las filas
-    const selectedIds = selectedRowsData.map((row) => row.id);
-
-    const partialPaymentAmount = partialPayment ? Number(partialPayment) : 0;
-
-    // Realizar la petición POST con las IDs seleccionadas
-    const data = {
-      amount,
-      type,
-      clientId,
-      costumeIds: costumeIds,
-      reservationDate,
-      deadline,
-      checkIn: checkIn.join(','), // Convertir el array a un string separado por comas
-      partialPayment, // Agregar el campo partialPayment con el valor true
-    };
-
-    setPartialPaymentAmount(amount - partialPaymentAmount);
-    axios.post('https://disfracesrosario.up.railway.app/transactions/newTransaction', data)
-      .then(response => {
-        console.log(response.data);
-        // Aquí puedes hacer algo con la respuesta, como redirigir a otra página
-        // Resetear el estado checkIn después de realizar la petición POST
-        setCheckIn([]);
-        setSelectedRows([]); // Limpiar las filas seleccionadas
-        alert("Alquiler realizada correctamente")
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error(error);
-        setError(error.message);
-        alert("Faltan campos por rellenar")
-        // Aquí puedes manejar el error de alguna manera
-      });
+  const data = {
+    amount,
+    type,
+    clientId,
+    costumeIds: costumeIds,
+    reservationDate,
+    deadline,
+    checkIn: checkIn.join(','),
+    partialPayment,
   };
+
+  setPartialPaymentAmount(amount - partialPaymentAmount);
+
+  axios
+    .post('https://disfracesrosario.up.railway.app/transactions/newTransaction', data)
+    .then(response => {
+      console.log(response.data);
+      setCheckIn([]);
+    })
+    .catch(error => {
+      alert(error.response.data.details);
+      setError(error.response.data.details);
+    });
+};
+
 
 
   const handleImageUrlChange = (url, clientIdValue) => {
@@ -219,14 +214,17 @@ const Datatable = ({ singleId }) => {
           value={amount}
           onChange={(event) => setAmount(Number(event.target.value))}
         />
-        <Input
-          color="info"
-          variant="soft"
-          placeholder="Monto de pago parcial"
-          value={partialPayment}
-          onChange={(e) => setPartialPayment(e.target.value)}
-          type="number"
-        />
+        <form onSubmit={onSubmit}>
+          <Input
+            color="info"
+            variant="soft"
+            placeholder="Monto de pago parcial"
+            name="partialPayment"
+            value={partialPayment}
+            onChange={(e) => setPartialPayment(e.target.value)}
+            type="number"
+          />
+        </form>
         <TextField
           label="Monto a pagar"
           value={amount - partialPayment}

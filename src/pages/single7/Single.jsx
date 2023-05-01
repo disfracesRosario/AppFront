@@ -118,8 +118,8 @@ export default function BasicGrid({ onImageUrlChange, onIdChange, onTransactionI
                 <TableCell>Nombre del Disfraz</TableCell>
                 <TableCell>Fecha de Reserva</TableCell>
                 <TableCell>Fecha de Entrega</TableCell>
-                <TableCell>Imagen</TableCell>
-                <TableCell>Seleccionar</TableCell>
+                <TableCell>Pago</TableCell>
+              
               </TableRow>
             </TableHead>
             <TableBody>
@@ -129,6 +129,7 @@ export default function BasicGrid({ onImageUrlChange, onIdChange, onTransactionI
                   <TableCell style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{costume.names}</TableCell>
                   <TableCell style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{costume.reservationDate}</TableCell>
                   <TableCell style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{costume.deadline}</TableCell>
+                  <TableCell style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{costume.amount}</TableCell>
                   <TableCell>
                     {costume.image && (
                       <img src={costume.image} alt="Disfraz" height="100" width="100" />
