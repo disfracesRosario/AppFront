@@ -32,8 +32,8 @@ function ClientHistory() {
               <th style={{ padding: "0 10px" }}>Forma de pago</th>
               <th style={{ padding: "0 10px" }}>Nombre disfraz</th>
               <th style={{ padding: "0 10px" }}>Fecha de entrega</th>
+              <th style={{ padding: "0 10px" }}>Fecha de retiro</th>
               <th style={{ padding: "0 10px" }}>Tipo de Factura</th>
-              <th style={{ padding: "0 10px" }}>Factura</th>
             </tr>
           </thead>
           <tbody>

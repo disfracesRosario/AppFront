@@ -5,10 +5,15 @@ import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Widget from "../../components/widget3/Widget";
+import TextField from "@material-ui/core/TextField";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const Datatable = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [type, setType] = useState('');
+  const [monthNumber, setMonthNumber] = useState(1);
+
 
   const handleDelete = (id) => {
     if (window.confirm("¿Estás seguro de que quieres borrar este cliente?")) {
@@ -20,6 +25,9 @@ const Datatable = () => {
         .catch((error) => console.log(error));
     }
   };
+
+ 
+
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
