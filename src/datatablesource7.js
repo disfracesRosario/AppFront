@@ -23,7 +23,7 @@ export const userColumns = [
     width: 200,
   },
   {
-    field: "documentnumNber",
+    field: "documentNumber",
     headerName: "Documento",
     width: 200,
   },
@@ -36,6 +36,7 @@ export const userColumns = [
 
 export function UserTable() {
   const [userRows, setUserRows] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     axios
@@ -44,10 +45,20 @@ export function UserTable() {
       .catch((error) => console.log(error));
   }, []);
 
+  const filteredRows = userRows.filter((row) =>
+    row.documentNumber.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div>
       <h1>Tabla de usuarios</h1>
-      <DataGrid rows={userRows} columns={userColumns} />
+      <input
+        type="text"
+        placeholder="Buscar por DNI"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <DataGrid rows={filteredRows} columns={userColumns} />
     </div>
   );
 }
