@@ -128,6 +128,8 @@ const Datatable = ({ singleId }) => {
     .then(response => {
       console.log(response.data);
       setCheckIn([]);
+      alert("Alquiler realizado correctamente")
+      window.location.href = '/';
     })
     .catch(error => {
       alert(error.response.data.details);

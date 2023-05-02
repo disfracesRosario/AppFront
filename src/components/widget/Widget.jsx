@@ -91,13 +91,10 @@ const Widget = ({ type }) => {
         isMoney: true,
         link: "",
         icon: (
-          <PersonOutlinedIcon
-            className="icon"
-            style={{
-              color: "green",
-              backgroundColor: "rgba(0, 128, 0, 0.2)",
-            }}
-          />
+          <MonetizationOnOutlinedIcon
+              className="icon"
+              style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
+            />
         ),
         value: totalElectronic, // Agrega esta línea para mostrar el valor de facturación electrónica
       };
@@ -131,7 +128,7 @@ const Widget = ({ type }) => {
           </div>
         ),
         icon: (
-          <ShoppingCartOutlinedIcon
+          <MonetizationOnOutlinedIcon
             className="icon"
             style={{
               backgroundColor: "rgba(255, 0, 0, 0.2)",

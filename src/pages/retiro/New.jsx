@@ -104,9 +104,11 @@ const Datatable = ({ singleId, onTransactionIdChange, onIdChange, onTransactionI
       .then(data => {
         // Realizar las acciones necesarias con la respuesta del servidor
       })
+      alert("Devolucion hecha con exito")
       .catch(error => {
         setError(error.message);
       });
+      window.location.href = '/';
   };
 
   const handleImageUrlChange = (url, clientDocumentValue) => {
@@ -161,6 +163,7 @@ const Datatable = ({ singleId, onTransactionIdChange, onIdChange, onTransactionI
           type="text"
           value={clientDocument}
           onChange={(e) => handleIdChange(e.target.value)}
+          sx={{ width: "250px", marginTop: "10px" }}
           placeholder="Ingrese el DNI del cliente"
           color="info"
         />
