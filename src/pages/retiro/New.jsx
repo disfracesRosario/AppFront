@@ -181,6 +181,7 @@ const Datatable = ({ singleId, onTransactionIdChange, onIdChange, onTransactionI
           label="Adeuda Dinero"
         />
         <Check name="Devolucion" value={true} onCheckInChange={(checked) => handleDevolutionChange("Entrego", checked, true)} />
+        <Check name="Retiro" value={false} onCheckInChange={(checked) => handleDevolutionChange("Retiro", checked, false)} />
       </div>
 
       <Button onClick={handleAccept}>Aceptar</Button>

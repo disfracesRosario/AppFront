@@ -85,33 +85,6 @@ return (
         }}
       />
     </div>
-    <div className="selectedCostumes">
-      <h2>Disfraces seleccionados:</h2>
-      {selectedCostumeIds.length > 0 ? (
-        <ul>
-          {selectedCostumeIds.map((id) => (
-            <li key={id}>{`Disfraz ${id}`}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No se ha seleccionado ningún disfraz</p>
-      )}
-      {selectedCostumeIds.length > 0 ? (
-        <input
-          type="text"
-          className="selectedCostumesInput"
-          value={`Disfraces seleccionados: ${selectedCostumeIds.join(", ")}`}
-          readOnly
-        />
-      ) : (
-        <input
-          type="text"
-          className="selectedCostumesInput"
-          value="No se ha seleccionado ningún disfraz"
-          readOnly
-        />
-      )}
-    </div>
   </div>
 );
 };

@@ -126,7 +126,7 @@ export default function BasicCard() {
             <Typography sx={{ fontSize: 20 }} color="text.primary" gutterBottom>
               ADEUDADO
             </Typography>
-            <Typography variant="body2" sx={{ fontSize: 20 }}>
+            <Typography variant="body2" sx={{ fontSize: 25 }}>
               ${data.selectMonthPending2}
             </Typography>
           </CardContent>

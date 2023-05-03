@@ -89,9 +89,6 @@ export default function BasicGrid({ onImageUrlChange, onIdChange, onTransactionI
           <Grid xs={2}>
             <Item>Apellido: {clientData ? clientData.lastName : ''}</Item>
           </Grid>
-          <Grid xs={2}>
-            <Item>Dni: {clientData ? clientData.documentNumber : ''}</Item>
-          </Grid>
           <Grid container spacing={2} sx={{ flexGrow: 1 }}>
             <Grid item xs={4}>
               <Input

@@ -35,13 +35,12 @@ const Datatable = ({ singleId }) => {
   const [selectedCostumeIds, setSelectedCostumeIds] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [newConstant, setNewConstant] = useState(0);
-
+  const [isBancoChecked, setIsBancoChecked] = useState(false);
   const [partialPaymentAmount, setPartialPaymentAmount] = useState(0);
 
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
-
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
@@ -170,6 +169,16 @@ const Datatable = ({ singleId }) => {
   const handleCostumeSelect = (id) => {
     setCostumeIds([id]); // Actualizar el valor de costumeIds
   };
+  
+  function seleccionarTipoFactura(tipoFactura) {
+    if (tipoFactura === "facturaElectronica") {
+      // Mostrar el botón para la factura electrónica
+      document.getElementById("botonFacturaElectronica").style.display = "block";
+    } else {
+      // Ocultar el botón para cualquier otro tipo de factura
+      document.getElementById("botonFacturaElectronica").style.display = "none";
+    }
+  }
 
 
 
@@ -228,7 +237,7 @@ const Datatable = ({ singleId }) => {
           />
         </form>
         <TextField
-          label="Monto a pagar"
+          label="Adeuda"
           value={amount - partialPayment}
           InputProps={{
             readOnly: true,

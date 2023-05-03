@@ -38,6 +38,9 @@ export const userColumns = [
     headerName: "Fecha de Reserva",
     width: 230,
     renderCell: (params) => {
+      if (!params.value) {
+        return <div>-</div>;
+      }
       const date = new Date(params.value);
       const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
       return <div>{formattedDate}</div>;
@@ -48,6 +51,9 @@ export const userColumns = [
     headerName: "Fecha de Entrega",
     width: 200,
     renderCell: (params) => {
+      if (!params.value) {
+        return <div>-</div>;
+      }
       const date = new Date(params.value);
       const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
       return <div>{formattedDate}</div>;
