@@ -15,7 +15,7 @@ import Check from "../check/Check";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import { DatePicker, Space } from 'antd';
-
+import { FormControlLabel, Checkbox } from '@material-ui/core';
 
 
 
@@ -35,12 +35,19 @@ const Datatable = ({ singleId }) => {
   const [selectedCostumeIds, setSelectedCostumeIds] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [newConstant, setNewConstant] = useState(0);
-  const [isBancoChecked, setIsBancoChecked] = useState(false);
+  const [isInvoiceChecked, setIsInvoiceChecked] = useState(false);
   const [partialPaymentAmount, setPartialPaymentAmount] = useState(0);
 
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
+
+  const handleInvoiceChange = (event) => {
+    setIsInvoiceChecked(event.target.checked);
+  };
+
+  
+
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
@@ -103,38 +110,38 @@ const Datatable = ({ singleId }) => {
   };
 
   const handleAccept = () => {
-  const selectedRowsData = selectedRows.map((rowId) =>
-    data.find((row) => row.id === rowId)
-  );
-  const selectedIds = selectedRowsData.map((row) => row.id);
-  const partialPaymentAmount = partialPayment ? Number(partialPayment) : 0;
+    const selectedRowsData = selectedRows.map((rowId) =>
+      data.find((row) => row.id === rowId)
+    );
+    const selectedIds = selectedRowsData.map((row) => row.id);
+    const partialPaymentAmount = partialPayment ? Number(partialPayment) : 0;
 
-  const data = {
-    amount,
-    type,
-    clientId,
-    costumeIds: costumeIds,
-    reservationDate,
-    deadline,
-    checkIn: checkIn.join(','),
-    partialPayment,
+    const data = {
+      amount,
+      type,
+      clientId,
+      costumeIds: costumeIds,
+      reservationDate,
+      deadline,
+      checkIn: checkIn.join(','),
+      partialPayment,
+    };
+
+    setPartialPaymentAmount(amount - partialPaymentAmount);
+
+    axios
+      .post('https://disfracesrosario.up.railway.app/transactions/newTransaction', data)
+      .then(response => {
+        console.log(response.data);
+        setCheckIn([]);
+        alert("Alquiler realizado correctamente")
+        window.location.href = '/';
+      })
+      .catch(error => {
+        alert(error.response.data.details);
+        setError(error.response.data.details);
+      });
   };
-
-  setPartialPaymentAmount(amount - partialPaymentAmount);
-
-  axios
-    .post('https://disfracesrosario.up.railway.app/transactions/newTransaction', data)
-    .then(response => {
-      console.log(response.data);
-      setCheckIn([]);
-      alert("Alquiler realizado correctamente")
-      window.location.href = '/';
-    })
-    .catch(error => {
-      alert(error.response.data.details);
-      setError(error.response.data.details);
-    });
-};
 
 
 
@@ -169,16 +176,6 @@ const Datatable = ({ singleId }) => {
   const handleCostumeSelect = (id) => {
     setCostumeIds([id]); // Actualizar el valor de costumeIds
   };
-  
-  function seleccionarTipoFactura(tipoFactura) {
-    if (tipoFactura === "facturaElectronica") {
-      // Mostrar el botón para la factura electrónica
-      document.getElementById("botonFacturaElectronica").style.display = "block";
-    } else {
-      // Ocultar el botón para cualquier otro tipo de factura
-      document.getElementById("botonFacturaElectronica").style.display = "none";
-    }
-  }
 
 
 
@@ -237,7 +234,7 @@ const Datatable = ({ singleId }) => {
           />
         </form>
         <TextField
-          label="Adeuda"
+          label="Aduedado"
           value={amount - partialPayment}
           InputProps={{
             readOnly: true,
@@ -255,12 +252,26 @@ const Datatable = ({ singleId }) => {
           <MenuItem value="mercado_pago">Mercado Pago</MenuItem>
           <MenuItem value="efectivo">Efectivo</MenuItem>
           <MenuItem value="tarjeta">Tarjeta</MenuItem>
-          <MenuItem value="factura electronica">factura electronica</MenuItem>
+          <MenuItem value="factura electronica">Factura electronica (Marcar Casillero)</MenuItem>
         </TextField>
       </div>
 
       <div className="check">
         <div className="check">
+          <div className="invoice">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={isInvoiceChecked}
+                  onChange={handleInvoiceChange}
+                  name="invoice"
+                  color="primary"
+                />
+              }
+              label="Facturación Electrónica"
+            />
+            {isInvoiceChecked && <Button variant="outlined"  color="info"><a  target="_blank" href="https://auth.afip.gob.ar/contribuyente_/login.xhtml?action=SYSTEM&system=rcel">Generar Factura</a></Button>}
+          </div>
           <Check name="Banco" onCheckInChange={handleCheckInChange} />
           <Check name="Remito" onCheckInChange={handleCheckInChange} />
         </div>
