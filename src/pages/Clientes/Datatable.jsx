@@ -1,7 +1,7 @@
 import "./datatable.scss";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
-import { userColumns } from "../../datatablesource7";
-import UserTable, { userRows } from "../../datatablesource7";
+import { userColumns } from "../../tablaclient";
+import UserTable, { userRows } from "../../tablaclient";
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";

@@ -20,7 +20,13 @@ const Navbar = () => {
         <div className="">
         </div>
         <div className="items">
-      
+        <div className="login">
+            <Link to="/login" style={{ textDecoration: "none" }}>
+              <div className="img">  
+                <img src="https://cdn.discordapp.com/attachments/744349867559747615/1113185044756971550/image.png"  alt="" />
+                </div>
+            </Link>
+          </div>
    
         </div>
       </div>

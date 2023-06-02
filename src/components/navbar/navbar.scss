@@ -75,6 +75,12 @@
     font-size: 40px;
   }
 
+  img {
+    height: 2vw;
+    border-radius: 10px;
+  }
+  
+
   @media screen and (max-width: 1170) {
     .navbar {
       display: flex;

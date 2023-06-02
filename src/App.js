@@ -8,19 +8,21 @@ import Single3 from "./pages/single3/Single";
 import Single4 from "./pages/single4/Single";
 import Single5 from "./pages/single5/Single";
 import Single8 from "./pages/single8/Single";
+import Single9 from "./pages/single9/Single";
 import New from "./pages/new/New";
 import New2 from "./pages/new2/New";
-
+import Ventas from "./pages/ventas/New"; 
 
 
 import Nuevafac from "./pages/nuevafac/New";
 import Facturacion from "./pages/facturacion/Facturacion";
 import Disfraces from "./components/disfraces/Disfraces";
+import Productos from "./components/productos/Disfraces";
 import Histfac from "./pages/histfac/Histfac";
 import Factele from "./pages/factele/Factele";
 import New3 from "./pages/nuevopedido/New";
 import New4 from "./pages/retiro/New";
-
+import New5 from "./pages/new3/New";
 
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -45,6 +47,8 @@ function App() {
             <Route path="usuarios" element={<Usuarios />} />
             <Route path="histfac" element={<Histfac />} />
             <Route path="factele" element={<Factele />} />
+            <Route path="ventas" element={<Ventas />} />
+            <Route path="productos" element={<Productos />} />
             <Route path="disfraces" element={<Disfraces />} />
             <Route path="nuevopedido" element={<New3 />} />
             <Route path="retiro" element={<New4 />} />
@@ -78,6 +82,27 @@ function App() {
               />
             </Route>
 
+            
+            <Route path="user">
+
+              <Route index element={<Single9 />} />
+
+              <Route path=":userId" element={<Single9 />} />
+
+              <Route
+                path="new3"
+                element={<New5 inputs={userInputs2} title="Agregar Producto Nuevo" />}
+              />
+            </Route>
+
+            <Route path="single9">
+
+              <Route index element={<Single9 />} />
+
+              <Route path=":userId" element={<Single9 />} />
+
+
+            </Route>
 
 
 
