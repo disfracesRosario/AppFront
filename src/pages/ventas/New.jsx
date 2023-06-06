@@ -20,6 +20,7 @@ import { PDFDocument, StandardFonts } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 
 
+
 const Datatable = ({ singleId }) => {
   const [selectedDni, setSelectedDni] = useState(null);
   const [selectedClient, setSelectedClient] = useState(null);
@@ -90,7 +91,7 @@ const Datatable = ({ singleId }) => {
     };
     setSelectedProducts([...selectedProducts, newProduct]);
   };
-  
+
 
   const handleCheckInChange = (name, checked) => {
     if (checked) {
@@ -128,27 +129,27 @@ const Datatable = ({ singleId }) => {
     const selectedRowsData = selectedRows.map((rowId) =>
       data.find((row) => row.id === rowId)
     );
-  
+
     const products = selectedRowsData.map((row) => ({
       productId: row.id,
       quantity: selectedQuantities[row.id] || 1,
     }));
-  
+
     const requestData = {
       type,
       clientId,
       products: selectedProducts,
       checkIn: checkIn.join(','),
     };
-  
+
     const partialPaymentAmount = amount - partialPayment;
-  
+
     axios
       .post('https://disfracesrosario.up.railway.app/transactions/newTransactionSale', requestData)
       .then(response => {
         const responseData = response.data;
         console.log(responseData);
-  
+
         const remitoData = {
           id: responseData.id,
           amount: responseData.amount,
@@ -169,24 +170,23 @@ const Datatable = ({ singleId }) => {
           const { width, height } = page.getSize();
           const currentDate = new Date();
           const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
-          
+        
           // Cargar la imagen de fondo
           const imageUrl = 'https://res.cloudinary.com/dkzil7l5p/image/upload/v1685969339/plantillaRemito_eobfdb_me2a2u.png'; // URL de la imagen o ruta local
           const imageBytes = await fetch(imageUrl).then((res) => res.arrayBuffer());
           const backgroundImage = await pdfDoc.embedPng(imageBytes);
-          const fontSize = 10;
-
-
+          const fontSize = 12;
+        
           // Agregar contenido al PDF utilizando la biblioteca pdf-lib
-          page.drawImage(backgroundImage,{x: 0, y: 0,width: width,height: height,opacity: 1, });
-
+          page.drawImage(backgroundImage, { x: 0, y: 0, width: width, height: height, opacity: 1 });
+        
           const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
           page.setFont(font);
           page.setFontSize(fontSize);
-
-          page.drawText(`Fecha: ${formattedDate}`, { x: 50, y: height - 20, fontSize });
-          page.drawText(`ID: ${responseData.id}`, { x: 50, y: height - 50, fontSize });
-          page.drawText(`Monto: ${responseData.amount}`, { x: 50, y: height - 80, fontSize });
+        
+          page.drawText(`Fecha: ${formattedDate}`, { x: 365, y: height - 195, fontSize });
+          page.drawText(` ${responseData.id}`, { x: 390, y: height - 150, fontSize });
+          page.drawText(`TOTAL : ${responseData.amount}`, { x: 320, y: height - 655, fontSize });
           page.drawText(`Tipo: ${responseData.type}`, { x: 50, y: height - 110, fontSize });
           page.drawText(`Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`, { x: 50, y: height - 140, fontSize });
         
@@ -194,42 +194,47 @@ const Datatable = ({ singleId }) => {
         
         
           responseData.transactionDetails.forEach((detail, index) => {
-            page.drawText(`Producto: ${detail.product}`, { x: 50, y: height - 200, fontSize });
-            page.drawText(`Cantidad: ${detail.quantity}`, { x: 50, y: height - 230, fontSize });
-            page.drawText(`Total Unitario: ${detail.totalUnitario}`, { x: 50, y: height - 260, fontSize });
-            page.drawText(`Total del Producto: ${detail.totalProduct}`, { x: 50, y: height - 290, fontSize });
+            page.drawText(`Producto: ${detail.product}`, { x: 170, y: height - 360 - (30 * index), fontSize });
+            page.drawText(` ${detail.quantity}`, { x: 370, y: height - 360 - (30 * index), fontSize });
+            page.drawText(` ${detail.totalUnitario}`, { x: 420, y: height - 360 - (30 * index), fontSize });
+            page.drawText(`Total del Producto: ${detail.totalProduct}`, { x: 50, y: height - 290 - (30 * index), fontSize });
           });
         
           // Añadir más campos y detalles según sea necesario
-           
+        
           const pdfBytes = await pdfDoc.save();
         
           return pdfBytes;
         };
         
-    
-           // Generar el PDF del remito
-           generateRemitoPDF(responseData)
-           
-           .then(pdfBytes => {
-             const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-             
-   
-             // Descargar el PDF en el navegador del usuario
-             saveAs(blob, 'remito.pdf');
-   
-             setCheckIn([]);
-             
-           })
+        const generatePDFPreview = async (pdfBytes) => {
+          const pdfDataUri = 'data:application/pdf;base64,' + btoa(String.fromCharCode(...pdfBytes));
+        
+          const viewer = document.getElementById('pdf-viewer');
+          viewer.src = pdfDataUri;
+        };
+        
+        // Generar el PDF del remito
+        generateRemitoPDF(responseData)
+          .then(pdfBytes => {
+            // Generar la vista previa del PDF
+            generatePDFPreview(pdfBytes);
+        
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+        
+            // Descargar el PDF en el navegador del usuario
+            //COMENTAR CUANDO NO SE QUIERE DESCARGAR PARA PROBAR
+           // saveAs(blob, 'remito.pdf');
+        
+            setCheckIn([]);
+          })
+          .catch(error => {
+            console.log('Error al generar el PDF:', error);
+          });
 
-          
-      .catch(error => {
-        console.log('Error al generar el PDF:', error);
-      });
-  
         // Generar el remito utilizando remitoData
         console.log('Remito:', remitoData);
-  
+
         setCheckIn([]);
         alert("Venta realizada correctamente");
 
@@ -238,21 +243,6 @@ const Datatable = ({ singleId }) => {
         alert(error.response.data.details);
         setError(error.response.data.details);
       });
-  };
-  
-
-  const generateRemitoPDF = async (responseData) => {
-    const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage();
-    const { width, height } = page.getSize();
-  
-    // Agregar contenido al PDF utilizando la biblioteca pdf-lib
-    page.drawText(`ID: ${responseData.id}`, { x: 50, y: height - 50 });
-    // Añadir más campos y detalles según sea necesario
-  
-    const pdfBytes = await pdfDoc.save();
-  
-    return pdfBytes;
   };
 
 
