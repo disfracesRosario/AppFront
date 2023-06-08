@@ -159,6 +159,8 @@ const Datatable = ({ singleId }) => {
           checkIn: responseData.checkIn,
           clientName: responseData.clientName,
           clientLastName: responseData.clientLastName,
+          clientAdress: responseData.clientAdress,
+          clientDocument: responseData.clientDocument,
           transactionDetails: responseData.transactionDetails,
           billPayment: responseData.billPayment,
           statusPayment: responseData.statusPayment,
@@ -172,10 +174,10 @@ const Datatable = ({ singleId }) => {
           const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
         
           // Cargar la imagen de fondo
-          const imageUrl = 'https://res.cloudinary.com/dkzil7l5p/image/upload/v1685969339/plantillaRemito_eobfdb_me2a2u.png'; // URL de la imagen o ruta local
+          const imageUrl = 'https://res.cloudinary.com/dkzil7l5p/image/upload/v1686175894/plantillaRemito_edit_2_1_jgbxfz.png'; // URL de la imagen o ruta local
           const imageBytes = await fetch(imageUrl).then((res) => res.arrayBuffer());
           const backgroundImage = await pdfDoc.embedPng(imageBytes);
-          const fontSize = 12;
+          const fontSize = 9;
         
           // Agregar contenido al PDF utilizando la biblioteca pdf-lib
           page.drawImage(backgroundImage, { x: 0, y: 0, width: width, height: height, opacity: 1 });
@@ -184,20 +186,26 @@ const Datatable = ({ singleId }) => {
           page.setFont(font);
           page.setFontSize(fontSize);
         
-          page.drawText(`Fecha: ${formattedDate}`, { x: 365, y: height - 195, fontSize });
-          page.drawText(` ${responseData.id}`, { x: 390, y: height - 150, fontSize });
-          page.drawText(`TOTAL : ${responseData.amount}`, { x: 320, y: height - 655, fontSize });
-          page.drawText(`Tipo: ${responseData.type}`, { x: 50, y: height - 110, fontSize });
-          page.drawText(`Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`, { x: 50, y: height - 140, fontSize });
-        
-          page.drawText("Detalles de la transacción:", { x: 50, y: height - 170, fontSize });
+          page.drawText(`Fecha: ${formattedDate}`, { x: 370, y: height - 195, fontSize });
+          page.drawText(`Remito N°\n   ${responseData.id}`, { x: 390, y: height - 140, fontSize });
+          page.drawText(`TOTAL : ${responseData.amount}`, { x: 365, y: height - 655, fontSize });
+          page.drawText(`Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`, { x: 100, y: height - 227, fontSize });
+          page.drawText(`DNI: ${responseData.clientDocument}`, { x: 100, y: height - 241, fontSize });
+          page.drawText(`Direccion: ${responseData.clientAdress}`, { x: 100, y: height - 255, fontSize });
+          page.drawText(`Tipo: ${responseData.type}`, { x: 100, y: height - 269, fontSize });
+          page.drawText(`Telefono: ${responseData.type}`, { x: 100, y: height - 284, fontSize });
+          page.drawText(`identificafdor: ${responseData.clientId}`, { x: 100, y: height - 299, fontSize });
+          page.drawText(`Observaciones:  ${responseData.detail}`, { x: 100, y: height - 670, fontSize });
+          
+
         
         
           responseData.transactionDetails.forEach((detail, index) => {
-            page.drawText(`Producto: ${detail.product}`, { x: 170, y: height - 360 - (30 * index), fontSize });
-            page.drawText(` ${detail.quantity}`, { x: 370, y: height - 360 - (30 * index), fontSize });
-            page.drawText(` ${detail.totalUnitario}`, { x: 420, y: height - 360 - (30 * index), fontSize });
-            page.drawText(`Total del Producto: ${detail.totalProduct}`, { x: 50, y: height - 290 - (30 * index), fontSize });
+            page.drawText(`${detail.product}`, { x: 170, y: height - 360 - (20 * index), fontSize });
+            page.drawText(`${detail.quantity}`, { x: 320, y: height - 360 - (20 * index), fontSize });
+            page.drawText(`${detail.totalUnitario}`, { x: 365, y: height - 360 - (20 * index), fontSize });
+            page.drawText(`${detail.totalProduct}`, { x: 425, y: height - 360 - (20 * index), fontSize });
+            page.drawText(`${detail.productId}`, { x: 120, y: height - 360 - (20 * index), fontSize });
           });
         
           // Añadir más campos y detalles según sea necesario
