@@ -196,7 +196,7 @@ const Datatable = ({ singleId }) => {
           page.drawText(`Telefono: ${responseData.type}`, { x: 100, y: height - 284, fontSize });
           page.drawText(`identificafdor: ${responseData.clientId}`, { x: 100, y: height - 299, fontSize });
           page.drawText(`Observaciones:  ${responseData.detail}`, { x: 100, y: height - 670, fontSize });
-          
+          page.drawText("Detalles de la transacción:", { x: 10, y: height - 10, fontSize });
 
         
         
