@@ -167,16 +167,6 @@ const Datatable = ({ singleId }) => {
     setOpen(true);
     setData2(requestData);
     console.log(data2);
-    calculateTotalAmount();
-    const calculateTotalAmount = () => {
-      let total = 0;
-      selectedProducts.forEach((product) => {
-        total += product.price * product.quantity;
-      });
-      setTotalAmount(total);
-    };
-
-
     
 
 
