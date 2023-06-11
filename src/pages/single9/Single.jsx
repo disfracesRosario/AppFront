@@ -6,7 +6,6 @@ import List2 from '../lista/ListaDis';
 import "./single.scss";
 
 const Single = () => {
-  
   const [isEditing, setIsEditing] = useState(false);
   const [details, setDetails] = useState({
     id: '',
@@ -16,13 +15,20 @@ const Single = () => {
     stock: '',
     image:'',
   });
+  const [editedDetails, setEditedDetails] = useState({
+    id: '',
+    name: '',
+    productDescription: '',
+    price: '',
+    stock: '',
+    image:'',
+  });
   
   const url = window.location.href;
-const id = url.split("/").pop();// Obtener la id de la URL actual
+  const id = url.split("/").pop(); // Obtener la id de la URL actual
 
   useEffect(() => {
     async function fetchData() {
-      console.log(id)
       const response = await fetch(`https://disfracesrosario.up.railway.app/products/${id}`);
       const data = await response.json();
       setDetails(data);
@@ -30,16 +36,35 @@ const id = url.split("/").pop();// Obtener la id de la URL actual
     fetchData();
   }, [id]);
 
-  const handleEditClick = () => setIsEditing(!isEditing);
+  const handleEditClick = () => {
+    setIsEditing(!isEditing);
+    if (isEditing) {
+      setEditedDetails(details);
+    }
+  }
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setDetails({ ...details, [name]: value });
+    setEditedDetails({ ...editedDetails, [name]: value });
   }
 
-  const handleSaveClick = () => {
-    // Send details to server
+  const handleSaveClick = async () => {
+    const response = await fetch(`https://disfracesrosario.up.railway.app/products/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(editedDetails),
+    });
+
+    if (response.ok) {
+      setDetails(editedDetails);
+      setIsEditing(false);
+    } else {
+      // Manejar el error de acuerdo a tus requerimientos
+    }
   }
+
   return (
     <div className="single">
       <Sidebar />
@@ -48,7 +73,7 @@ const id = url.split("/").pop();// Obtener la id de la URL actual
         <div className="top">
           <div className="left">
             <div className="editButton" onClick={handleEditClick}>
-              {isEditing ? 'Terminar' : 'Editar'}
+              {isEditing ? '' : 'Editar'}
             </div>
             {isEditing && (
               <div className="editButtons">
@@ -65,7 +90,7 @@ const id = url.split("/").pop();// Obtener la id de la URL actual
                     <span className="itemKey">ID:</span>
                     <span className="itemValue">
                       {isEditing ? (
-                        <input type="text" name="id" value={details.id} onChange={handleInputChange} />
+                        <input type="text" name="id" value={editedDetails.id} onChange={handleInputChange} />
                       ) : (
                         details.id
                       )}
@@ -76,7 +101,7 @@ const id = url.split("/").pop();// Obtener la id de la URL actual
                   <span className="itemKey">Nombre:</span>
                   <span className="itemValue">
                     {isEditing ? (
-                      <input type="text" name="name" value={details.name} onChange={handleInputChange} />
+                      <input type="text" name="name" value={editedDetails.name} onChange={handleInputChange} />
                     ) : (
                       details.name
                     )}
@@ -86,7 +111,7 @@ const id = url.split("/").pop();// Obtener la id de la URL actual
                   <span className="itemKey">Descripcion:</span>
                   <span className="itemValue">
                     {isEditing ? (
-                      <input type="text" name="productDescription" value={details.productDescription} onChange={handleInputChange} />
+                      <input type="text" name="productDescription" value={editedDetails.productDescription} onChange={handleInputChange} />
                     ) : (
                       details.productDescription
                     )}
@@ -96,7 +121,7 @@ const id = url.split("/").pop();// Obtener la id de la URL actual
                   <span className="itemKey">Precio:</span>
                   <span className="itemValue">
                     {isEditing ? (
-                      <input type="text" name="price" value={details.price} onChange={handleInputChange} />
+                      <input type="text" name="price" value={editedDetails.price} onChange={handleInputChange} />
                     ) : (
                       details.price
                     )}
@@ -106,7 +131,7 @@ const id = url.split("/").pop();// Obtener la id de la URL actual
                   <span className="itemKey">Stock:</span>
                   <span className="itemValue">
                     {isEditing ? (
-                      <input type="text" name="stock" value={details.stock} onChange={handleInputChange} />
+                      <input type="text" name="stock" value={editedDetails.stock} onChange={handleInputChange} />
                     ) : (
                       details.stock
                     )}
@@ -116,7 +141,7 @@ const id = url.split("/").pop();// Obtener la id de la URL actual
             </div>
           </div>
           <div className="dni">
-          <img src={details.image} alt=""  width="500px" height="400px"/>
+            <img src={details.image} alt="" width="500px" height="400px" />
           </div>
         </div>
         <div className="bottom">

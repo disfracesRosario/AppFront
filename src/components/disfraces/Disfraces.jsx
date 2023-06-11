@@ -1,5 +1,7 @@
 import "./disfraces.scss";
 import { DataGrid } from "@mui/x-data-grid";
+import Sidebar from "../../components/sidebar/Sidebar";
+import Navbar from "../../components/navbar/Navbar";
 import { userColumns } from "../../datatablesource2";
 import UserTable, { userRows } from "../../disfra/datatablesource2";
 import { Link, useParams } from "react-router-dom";
