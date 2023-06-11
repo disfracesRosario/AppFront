@@ -13,11 +13,10 @@ const Datatable2 = ({ onCostumeSelect, selectedCostume }) => { // Paso el estado
   const [selectedQuantities, setSelectedQuantities] = useState({});
   const [selectedProducts, setSelectedProducts] = useState([]); // Define and initialize selectedProducts
 
-
-  const handleSelect = (id, quantity) => {
+  const handleSelect = (id, quantity, name, price) => {
     const updatedIds = [...selectedCostumeIds, id];
     setSelectedCostumeIds(updatedIds);
-    onCostumeSelect(id, quantity);
+    onCostumeSelect(id, quantity, name, price);
     handleQuantityChange(id, quantity); // Pasa la cantidad seleccionada actualizada
     console.log(`IDs seleccionadas: ${updatedIds.join(", ")}`);
   };
@@ -39,9 +38,11 @@ const Datatable2 = ({ onCostumeSelect, selectedCostume }) => { // Paso el estado
 
   const handleSelectButtonClick = (params) => {
     const costumeId = params.getValue(params.id, "id");
-    const quantity = selectedQuantities[costumeId] || 1; // Obtener la cantidad seleccionada actual
+    const costumeName = params.getValue(params.id, "name"); // Obtener el nombre del producto
+    const costumePrice = params.getValue(params.id, "price"); // Obtener el precio del producto
+    const quantity = selectedQuantities[costumeId] || 1;
     if (costumeId) {
-      handleSelect(costumeId, quantity);
+      handleSelect(costumeId, quantity, costumeName, costumePrice); // Pasa ID, cantidad, nombre y precio
     }
   };
 
@@ -67,10 +68,12 @@ const Datatable2 = ({ onCostumeSelect, selectedCostume }) => { // Paso el estado
   };
 
 
-  const handleCostumeSelect = (productId, quantity) => {
+  const handleCostumeSelect = (productId, quantity,price, name) => {
     const newProduct = {
       productId: productId,
       quantity: quantity,
+      price: price,
+      name: name,  
     };
     setSelectedProducts([...selectedProducts, newProduct]);
   };

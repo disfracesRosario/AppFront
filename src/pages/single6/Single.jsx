@@ -20,6 +20,7 @@ export default function BasicGrid({ onImageUrlChange, onIdChange }) {
   const [documentNumber, setDocumentNumber] = useState('');
   const [clientData, setClientData] = useState(null);
   const [id, setId] = useState('');
+  const [nameClient, setNameClient] = useState('');
   const [imageUrl, setImageUrl] = useState(null);
 
   const handleDniChange = (event) => {
@@ -28,6 +29,10 @@ export default function BasicGrid({ onImageUrlChange, onIdChange }) {
 
   const handleIdChange = (event) => {
     setId(event.target.value);
+  };
+
+  const handleNameClientChange = (event) => {
+    setNameClient(event.target.value);
   };
 
   const handleSearch = async () => {

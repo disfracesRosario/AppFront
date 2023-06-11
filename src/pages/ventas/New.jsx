@@ -18,6 +18,8 @@ import { DatePicker, Space } from 'antd';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
 import { PDFDocument, StandardFonts } from 'pdf-lib';
 import { saveAs } from 'file-saver';
+import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+
 
 
 
@@ -42,8 +44,14 @@ const Datatable = ({ singleId }) => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [quantities, setQuantities] = useState({});
   const [selectedQuantities, setSelectedQuantities] = useState({});
+  const [open, setOpen] = useState(false);
+  const [data2, setData2] = useState(null);
+  const [clientName, setClientName] = useState('');
+  const [totalAmount, setTotalAmount] = useState(0);
+  
 
 
+  
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
@@ -51,7 +59,6 @@ const Datatable = ({ singleId }) => {
   const handleInvoiceChange = (event) => {
     setIsInvoiceChecked(event.target.checked);
   };
-
 
 
 
@@ -84,14 +91,21 @@ const Datatable = ({ singleId }) => {
   ];
 
 
-  const handleCostumeSelect = (productId, quantity) => {
+  const handleCostumeSelect = (productId, quantity, price, nameProduct) => {
     const newProduct = {
       productId: productId,
-      quantity: quantity
+      quantity: quantity,
+      price: price,
+      nameProduct: nameProduct,
     };
     setSelectedProducts([...selectedProducts, newProduct]);
+    setSelectedQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: quantity,
+    }));
+    
   };
-
+  
 
   const handleCheckInChange = (name, checked) => {
     if (checked) {
@@ -100,6 +114,8 @@ const Datatable = ({ singleId }) => {
       setCheckIn(checkIn.filter((item) => item !== name));
     }
   };
+
+
   const onSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -133,6 +149,10 @@ const Datatable = ({ singleId }) => {
     const products = selectedRowsData.map((row) => ({
       productId: row.id,
       quantity: selectedQuantities[row.id] || 1,
+      price: row.price,
+      nameProduct: row.nameProduct,
+
+      
     }));
 
     const requestData = {
@@ -143,6 +163,22 @@ const Datatable = ({ singleId }) => {
     };
 
     const partialPaymentAmount = amount - partialPayment;
+
+    setOpen(true);
+    setData2(requestData);
+    console.log(data2);
+    calculateTotalAmount();
+    const calculateTotalAmount = () => {
+      let total = 0;
+      selectedProducts.forEach((product) => {
+        total += product.price * product.quantity;
+      });
+      setTotalAmount(total);
+    };
+
+
+    
+
 
     axios
       .post('https://disfracesrosario.up.railway.app/transactions/newTransactionSale', requestData)
@@ -165,6 +201,7 @@ const Datatable = ({ singleId }) => {
           billPayment: responseData.billPayment,
           statusPayment: responseData.statusPayment,
         };
+        
 
         const generateRemitoPDF = async (responseData) => {
           const pdfDoc = await PDFDocument.create();
@@ -270,6 +307,12 @@ const Datatable = ({ singleId }) => {
 
       // Mostrar las IDs que se van sumando en la consola
       console.log(`IDs seleccionadas: ${updatedIds.join(", ")}`);
+    } else{
+      // Actualiza las cantidades seleccionadas si la ID ya está seleccionada
+      setSelectedQuantities((prevQuantities) => ({
+        ...prevQuantities,
+        [id]: prevQuantities[id] + 1, // Incrementa la cantidad en 1
+      }));
     }
   };
 
@@ -283,6 +326,10 @@ const Datatable = ({ singleId }) => {
     setClientId(id);
   };
 
+  const handleNameChange = (name) => {
+    setClientName(name);
+  };
+
 
 
   return (
@@ -292,7 +339,7 @@ const Datatable = ({ singleId }) => {
         <a href="/">Volver a la pantalla</a>
       </button>
       <div className="info-cliente">
-        <BasicGrid onImageUrlChange={handleImageUrlChange} onIdChange={handleIdChange} />
+        <BasicGrid onImageUrlChange={handleImageUrlChange} onIdChange={handleIdChange} onNameChange={handleNameChange}  />
       </div>
       <div className="id">
       </div>
@@ -358,10 +405,41 @@ const Datatable = ({ singleId }) => {
       </div>
 
       <div className="final">
-        <Button onClick={handleAccept}>Aceptar</Button>
+        <Button onClick={() => setOpen(true)}>Aceptar</Button>
+        <Dialog open={open} onClose={() => setOpen(false)}>
+          <DialogTitle>Confirmación de la venta</DialogTitle>
+          <DialogContent>
+            {data2 && (
+              <div>
+                <h3>Verifique que los datos de la venta sean correctos:</h3>
+                <p>Monto: {data2.clientName}</p>
+                <p>Tipo: {data2.type}</p>
+                <p>Identificador de cliente: {data2.clientId}</p>
+                <p>Productos:</p>
+                <ul>
+                  {data2.products &&
+                    data2.products.map((product, index) => (
+                      <li key={index}>
+                         {selectedProducts.nameProduct} {product.price}, Cantidad: {product.quantity},  {totalAmount}
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)} color="primary">
+              Cancelar
+            </Button>
+            <Button onClick={handleAccept} color="primary">
+              Aceptar
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </div>
   );
-};
+}
+
 
 export default Datatable;
