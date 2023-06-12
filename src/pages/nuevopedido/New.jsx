@@ -172,7 +172,6 @@ const Datatable = ({ singleId }) => {
           const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
           page.setFont(font);
           page.setFontSize(fontSize);
-
           
           page.drawText("Detalles de la transacción:", { x: 10, y: height - 10, fontSize });
 
