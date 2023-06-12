@@ -158,14 +158,6 @@ const Datatable = ({ singleId }) => {
     setOpen(true);
     setData2(requestData);
     console.log(data2);
-    calculateTotalAmount();
-    const calculateTotalAmount = () => {
-      let total = 0;
-      selectedProducts.forEach((product) => {
-        total += product.price * product.quantity;
-      });
-      setTotalAmount(total);
-    };
 
     axios
       .post(
@@ -190,6 +182,7 @@ const Datatable = ({ singleId }) => {
           transactionDetails: responseData.transactionDetails,
           billPayment: responseData.billPayment,
           statusPayment: responseData.statusPayment,
+          clientPhone: responseData.clientPhone,
         };
 
         const generateRemitoPDF = async (responseData) => {
@@ -222,6 +215,61 @@ const Datatable = ({ singleId }) => {
           const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
           page.setFont(font);
           page.setFontSize(fontSize);
+
+          page.drawText(`Fecha: ${formattedDate}`, {
+            x: 370,
+            y: height - 195,
+            fontSize,
+          });
+          page.drawText(`Remito N°\n   ${responseData.id}`, {
+            x: 390,
+            y: height - 140,
+            fontSize,
+          });
+          page.drawText(`TOTAL : ${responseData.amount}`, {
+            x: 365,
+            y: height - 655,
+            fontSize,
+          });
+          page.drawText(
+            `Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`,
+            { x: 100, y: height - 227, fontSize }
+          );
+          page.drawText(`DNI: ${responseData.clientDocument}`, {
+            x: 100,
+            y: height - 241,
+            fontSize,
+          });
+          page.drawText(`Direccion: ${responseData.clientAdress}`, {
+            x: 100,
+            y: height - 255,
+            fontSize,
+          });
+          page.drawText(`Tipo: ${responseData.type}`, {
+            x: 100,
+            y: height - 269,
+            fontSize,
+          });
+          page.drawText(`Telefono: ${responseData.clientPhone}`, {
+            x: 100,
+            y: height - 284,
+            fontSize,
+          });
+          page.drawText(`identificafdor: ${responseData.clientId}`, {
+            x: 100,
+            y: height - 299,
+            fontSize,
+          });
+          page.drawText(`Observaciones:  ${responseData.detail}`, {
+            x: 100,
+            y: height - 670,
+            fontSize,
+          });
+          page.drawText("Detalles de la transacción:", {
+            x: 10,
+            y: height - 10,
+            fontSize,
+          });
 
           page.drawText(`Fecha: ${formattedDate}`, {
             x: 370,

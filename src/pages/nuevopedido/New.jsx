@@ -136,9 +136,171 @@ const Datatable = ({ singleId }) => {
         data
       )
       .then((response) => {
+        const responseData = response.data;
+        console.log(responseData);
+        const remitoData = {
+          id: responseData.id,
+          amount: responseData.amount,
+          type: responseData.type,
+          clientId: responseData.clientId,
+          names: responseData.names,
+          checkIn: responseData.checkIn,
+          clientName: responseData.clientName,
+          clientLastName: responseData.clientLastName,
+          clientAdress: responseData.clientAdress,
+          clientDocument: responseData.clientDocument,
+          costumeIds: responseData.costumeIds,
+          billPayment: responseData.billPayment,
+          statusPayment: responseData.statusPayment,
+          clientPhone: responseData.clientPhone,
+        };
+
+        const generateRemitoPDF = async (responseData) => {
+          const pdfDoc = await PDFDocument.create();
+          const page = pdfDoc.addPage([595.28, 841.89]);
+          const { width, height } = page.getSize();
+          const currentDate = new Date();
+          const formattedDate = `${currentDate.getDate()}/${
+            currentDate.getMonth() + 1
+          }/${currentDate.getFullYear()}`;
+
+          // Cargar la imagen de fondo
+          const imageUrl =
+            "https://res.cloudinary.com/dkzil7l5p/image/upload/v1686175894/plantillaRemito_edit_2_1_jgbxfz.png"; // URL de la imagen o ruta local
+          const imageBytes = await fetch(imageUrl).then((res) =>
+            res.arrayBuffer()
+          );
+          const backgroundImage = await pdfDoc.embedPng(imageBytes);
+          const fontSize = 9;
+
+          // Agregar contenido al PDF utilizando la biblioteca pdf-lib
+          page.drawImage(backgroundImage, {
+            x: 0,
+            y: 0,
+            width: width,
+            height: height,
+            opacity: 1,
+          });
+
+          const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+          page.setFont(font);
+          page.setFontSize(fontSize);
+
+          page.drawText("Detalles de la transacción:", {
+            x: 10,
+            y: height - 10,
+            fontSize,
+          });
+
+          page.drawText(`Fecha: ${formattedDate}`, {
+            x: 370,
+            y: height - 195,
+            fontSize,
+          });
+          page.drawText(`Remito N°\n   ${responseData.id}`, {
+            x: 390,
+            y: height - 140,
+            fontSize,
+          });
+          page.drawText(`TOTAL : ${responseData.amount}`, {
+            x: 365,
+            y: height - 655,
+            fontSize,
+          });
+          page.drawText(
+            `Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`,
+            { x: 100, y: height - 227, fontSize }
+          );
+          page.drawText(`DNI: ${responseData.clientDocument}`, {
+            x: 100,
+            y: height - 241,
+            fontSize,
+          });
+          page.drawText(`Direccion: ${responseData.clientAdress}`, {
+            x: 100,
+            y: height - 255,
+            fontSize,
+          });
+          page.drawText(`Telefono: ${responseData.clientPhone}`, {
+            x: 100,
+            y: height - 269,
+            fontSize,
+          });
+          page.drawText(`Tipo: ${responseData.type}`, {
+            x: 100,
+            y: height - 284,
+            fontSize,
+          });
+          page.drawText(`identificafdor: ${responseData.clientId}`, {
+            x: 100,
+            y: height - 299,
+            fontSize,
+          });
+          page.drawText(`Observaciones:  ${responseData.detail}`, {
+            x: 100,
+            y: height - 670,
+            fontSize,
+          });
+
+          page.drawText(
+            `Desde ${data.reservationDate} Hasta ${data.deadline}`,
+            { x: 290, y: height - 360, fontSize }
+          );
+
+          responseData.costumeIds.forEach((detail, index) => {
+            page.drawText(`${detail}`, {
+              x: 120,
+              y: height - 360 - 20 * index,
+              fontSize,
+            });
+          });
+
+          responseData.names.forEach((detail, index) => {
+            page.drawText(`${detail}`, {
+              x: 170,
+              y: height - 360 - 20 * index,
+              fontSize,
+            });
+          });
+
+          // Añadir más campos y detalles según sea necesario
+
+          const pdfBytes = await pdfDoc.save();
+
+          return pdfBytes;
+        };
+
+        const generatePDFPreview = async (pdfBytes) => {
+          const pdfDataUri =
+            "data:application/pdf;base64," +
+            btoa(String.fromCharCode(...pdfBytes));
+
+          const viewer = document.getElementById("pdf-viewer");
+          viewer.src = pdfDataUri;
+        };
+
+        // Generar el PDF del remito
+        generateRemitoPDF(responseData)
+          .then((pdfBytes) => {
+            // Generar la vista previa del PDF
+            generatePDFPreview(pdfBytes);
+
+            const blob = new Blob([pdfBytes], { type: "application/pdf" });
+
+            // Descargar el PDF en el navegador del usuario
+            //COMENTAR CUANDO NO SE QUIERE DESCARGAR PARA PROBAR
+            // saveAs(blob, 'remito.pdf');
+
+            setCheckIn([]);
+          })
+          .catch((error) => {
+            console.log("Error al generar el PDF:", error);
+          });
+
         console.log(response.data);
         setCheckIn([]);
-        alert("Alquiler realizado correctamente");
+        //alert("Alquiler realizado correctamente")
+        // window.location.href = '/';
       })
       .catch((error) => {
         alert(error.response.data.details);
