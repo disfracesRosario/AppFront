@@ -12,11 +12,11 @@ export const userColumns = [
   {
     field: "name",
     headerName: "Nombre",
-    width: 190,
+    width: 290,
     renderCell: (params) => {
       return (
-        <div className="">
-          <img className="" alt="" />
+        <div className="image-container">
+          <img className="user-image" alt="" src={params.row.image} />
           {params.row.name}
         </div>
       );

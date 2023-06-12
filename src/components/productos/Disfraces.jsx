@@ -1,4 +1,4 @@
-import "./disfraces.scss";
+import "./productos.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { userColumns } from "../../tablaproductos";
 import UserTable, { userRows } from "../../tablaproductos";

@@ -15,6 +15,10 @@ function App() {
       password: "pass1"
     },
     {
+      username: "rosario123",
+      password: "1234"
+    },
+    {
       username: "user2",
       password: "pass2"
     }
@@ -41,6 +45,7 @@ function App() {
         setErrorMessages({ name: "pass", message: errors.pass });
       } else {
         setIsSubmitted(true);
+        window.location.href = "/"; // Redirige a la página principal
       }
     } else {
       // Username not found
@@ -69,7 +74,7 @@ function App() {
           {renderErrorMessage("pass")}
         </div>
         <div className="button-container">
-          <input type="submit" />
+          <input type="submit" value="Enviar" />
         </div>
       </form>
     </div>
