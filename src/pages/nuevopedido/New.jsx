@@ -1,37 +1,36 @@
 import "./new1.scss";
-import * as React from 'react';
+import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { userColumns, userRows } from "../../datatablesource2";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { Input } from '@mui/joy';
+import { useState } from "react";
+import { Input } from "@mui/joy";
 import Single6 from "../single6/Single";
-import Button from '@mui/joy/Button';
+import Button from "@mui/joy/Button";
 import Calendario from "../calendario/Calendario";
 import BasicGrid from "../../pages/single6/Single";
 import Disfraces from "../disfraces2/Disfraces";
-import axios from 'axios';
+import axios from "axios";
 import Check from "../check/Check";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
-import { DatePicker, Space } from 'antd';
-import { FormControlLabel, Checkbox } from '@material-ui/core';
-
-
+import { DatePicker, Space } from "antd";
+import { FormControlLabel, Checkbox } from "@material-ui/core";
+import { useEffect } from "react";
 
 const Datatable = ({ singleId }) => {
   const [selectedDni, setSelectedDni] = useState(null);
   const [selectedClient, setSelectedClient] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
-  const [amount, setAmount] = useState('');
-  const [type, setType] = useState('');
-  const [clientId, setClientId] = useState('');
+  const [imageUrl, setImageUrl] = useState("");
+  const [amount, setAmount] = useState("");
+  const [type, setType] = useState("");
+  const [clientId, setClientId] = useState("");
   const [costumeIds, setCostumeIds] = useState([]);
   const [checkIn, setCheckIn] = useState([]);
-  const [id, setId] = useState('');
-  const [partialPayment, setPartialPayment] = useState('');
-  const [reservationDate, setReservationDate] = useState('');
-  const [deadline, setDeadline] = useState('');
+  const [id, setId] = useState("");
+  const [partialPayment, setPartialPayment] = useState("");
+  const [reservationDate, setReservationDate] = useState("");
+  const [deadline, setDeadline] = useState("");
   const [selectedCostumeIds, setSelectedCostumeIds] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [newConstant, setNewConstant] = useState(0);
@@ -45,9 +44,6 @@ const Datatable = ({ singleId }) => {
   const handleInvoiceChange = (event) => {
     setIsInvoiceChecked(event.target.checked);
   };
-
-  
-
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
@@ -101,13 +97,18 @@ const Datatable = ({ singleId }) => {
       setSelectedCostumeIds(updatedIds);
 
       // Establecer el valor del estado costumeIds como un array de cadenas de texto
-      const idsString = updatedIds.join(',');
+      const idsString = updatedIds.join(",");
       setCostumeIds(idsString);
 
       // Mostrar las IDs que se van sumando en la consola
       console.log(`IDs seleccionadas: ${idsString}`);
     }
   };
+
+  useEffect(() => {
+    const idsString = selectedCostumeIds.join(",");
+    setCostumeIds(idsString);
+  }, [selectedCostumeIds]);
 
   const handleAccept = () => {
     const selectedRowsData = selectedRows.map((rowId) =>
@@ -120,36 +121,35 @@ const Datatable = ({ singleId }) => {
       amount,
       type,
       clientId,
-      costumeIds: costumeIds,
+      costumeIds: selectedCostumeIds,
       reservationDate,
       deadline,
-      checkIn: checkIn.join(','),
+      checkIn: checkIn.join(","),
       partialPayment,
     };
 
     setPartialPaymentAmount(amount - partialPaymentAmount);
 
     axios
-      .post('https://disfracesrosario.up.railway.app/transactions/newTransaction', data)
-      .then(response => {
+      .post(
+        "https://disfracesrosario.up.railway.app/transactions/newTransaction",
+        data
+      )
+      .then((response) => {
         console.log(response.data);
         setCheckIn([]);
-        alert("Alquiler realizado correctamente")
-        window.location.href = '/';
+        alert("Alquiler realizado correctamente");
       })
-      .catch(error => {
+      .catch((error) => {
         alert(error.response.data.details);
         setError(error.response.data.details);
       });
   };
 
-
-
   const handleImageUrlChange = (url, clientIdValue) => {
     setImageUrl(url);
     setClientId(clientIdValue);
   };
-
 
   const handleSelect = (id) => {
     // Verificar si la ID ya está seleccionada
@@ -157,18 +157,15 @@ const Datatable = ({ singleId }) => {
       // Añadir la ID seleccionada a la lista de IDs previamente seleccionadas
       const updatedIds = [...selectedCostumeIds, id];
       setSelectedCostumeIds(updatedIds);
-      setCostumeIds((prevIds) => [...prevIds, id]); // Agregar la ID del disfraz seleccionado a la matriz costumeIds
 
       // Mostrar las IDs que se van sumando en la consola
-      console.log(`IDs seleccionadas: ${updatedIds.join(", ")}`);
+      console.log("IDs seleccionadas:", updatedIds);
     }
   };
-
   const handleSelectionChange = (selection) => {
     const selectedIds = selection.map((selectedRow) => selectedRow.id);
     handleSelect(selectedIds);
   };
-
 
   const handleIdChange = (id) => {
     setClientId(id);
@@ -177,8 +174,6 @@ const Datatable = ({ singleId }) => {
     setCostumeIds([id]); // Actualizar el valor de costumeIds
   };
 
-
-
   return (
     <div className="datatable">
       {error && <p>{error}</p>}
@@ -186,23 +181,26 @@ const Datatable = ({ singleId }) => {
         <a href="/">Volver</a>
       </button>
       <div className="info-cliente">
-        <BasicGrid onImageUrlChange={handleImageUrlChange} onIdChange={handleIdChange} />
+        <BasicGrid
+          onImageUrlChange={handleImageUrlChange}
+          onIdChange={handleIdChange}
+        />
       </div>
-      <div className="id">
-      </div>
+      <div className="id"></div>
       <div className="tabla">
-        <Disfraces onCostumeSelect={handleCostumeSelect} />
+        <Disfraces onCostumeSelect={handleSelect} />
         <Input
           color="info"
           placeholder="IDs de disfraces (separados por comas)"
           variant="outlined"
-          value={costumeIds}
+          value={
+            selectedCostumeIds.length > 0 ? selectedCostumeIds.join(", ") : ""
+          } // Convertir el array en una cadena separada por comas
           onChange={(event) => {
-            const ids = event.target.value.split(',').map((id) => id.trim());
-            setCostumeIds(ids.join(',')); // Actualizar el estado costumeIds
+            const ids = event.target.value.split(",").map((id) => id.trim());
+            setSelectedCostumeIds(ids); // Actualizar el estado selectedCostumeIds como un array
           }}
         />
-
       </div>
       <div className="info">
         <div className="calendario">
@@ -252,7 +250,9 @@ const Datatable = ({ singleId }) => {
           <MenuItem value="mercado_pago">Mercado Pago</MenuItem>
           <MenuItem value="efectivo">Efectivo</MenuItem>
           <MenuItem value="tarjeta">Tarjeta</MenuItem>
-          <MenuItem value="factura electronica">Factura electronica (Marcar Casillero)</MenuItem>
+          <MenuItem value="factura electronica">
+            Factura electronica (Marcar Casillero)
+          </MenuItem>
         </TextField>
       </div>
 
@@ -270,7 +270,16 @@ const Datatable = ({ singleId }) => {
               }
               label="Facturación Electrónica"
             />
-            {isInvoiceChecked && <Button variant="outlined"  color="info"><a  target="_blank" href="https://auth.afip.gob.ar/contribuyente_/login.xhtml?action=SYSTEM&system=rcel">Generar Factura</a></Button>}
+            {isInvoiceChecked && (
+              <Button variant="outlined" color="info">
+                <a
+                  target="_blank"
+                  href="https://auth.afip.gob.ar/contribuyente_/login.xhtml?action=SYSTEM&system=rcel"
+                >
+                  Generar Factura
+                </a>
+              </Button>
+            )}
           </div>
           <Check name="Banco" onCheckInChange={handleCheckInChange} />
           <Check name="Remito" onCheckInChange={handleCheckInChange} />

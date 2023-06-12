@@ -1,38 +1,37 @@
 import "./new5.scss";
-import * as React from 'react';
+import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { userColumns, userRows } from "../../datatablesource2";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Input } from '@mui/joy';
+import { Input } from "@mui/joy";
 import Single6 from "../single6/Single";
-import Button from '@mui/joy/Button';
+import Button from "@mui/joy/Button";
 import Calendario from "../calendario/Calendario";
 import BasicGrid from "../single6/Single";
 import Productos from "../productos/Disfraces";
-import axios from 'axios';
+import axios from "axios";
 import Check from "../check/Check";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
-import { DatePicker, Space } from 'antd';
-import { FormControlLabel, Checkbox } from '@material-ui/core';
-import { PDFDocument, StandardFonts } from 'pdf-lib';
-import { saveAs } from 'file-saver';
-
+import { DatePicker, Space } from "antd";
+import { FormControlLabel, Checkbox } from "@material-ui/core";
+import { PDFDocument, StandardFonts } from "pdf-lib";
+import { saveAs } from "file-saver";
 
 const Datatable = ({ singleId }) => {
   const [selectedDni, setSelectedDni] = useState(null);
   const [selectedClient, setSelectedClient] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
-  const [amount, setAmount] = useState('');
-  const [type, setType] = useState('');
-  const [clientId, setClientId] = useState('');
+  const [imageUrl, setImageUrl] = useState("");
+  const [amount, setAmount] = useState("");
+  const [type, setType] = useState("");
+  const [clientId, setClientId] = useState("");
   const [costumeIds, setCostumeIds] = useState([]);
   const [checkIn, setCheckIn] = useState([]);
-  const [id, setId] = useState('');
-  const [partialPayment, setPartialPayment] = useState('');
-  const [reservationDate, setReservationDate] = useState('');
-  const [deadline, setDeadline] = useState('');
+  const [id, setId] = useState("");
+  const [partialPayment, setPartialPayment] = useState("");
+  const [reservationDate, setReservationDate] = useState("");
+  const [deadline, setDeadline] = useState("");
   const [selectedCostumeIds, setSelectedCostumeIds] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [newConstant, setNewConstant] = useState(0);
@@ -42,7 +41,6 @@ const Datatable = ({ singleId }) => {
   const [quantities, setQuantities] = useState({});
   const [selectedQuantities, setSelectedQuantities] = useState({});
 
-
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
@@ -50,9 +48,6 @@ const Datatable = ({ singleId }) => {
   const handleInvoiceChange = (event) => {
     setIsInvoiceChecked(event.target.checked);
   };
-
-
-
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
@@ -82,15 +77,13 @@ const Datatable = ({ singleId }) => {
     },
   ];
 
-
   const handleCostumeSelect = (productId, quantity) => {
     const newProduct = {
       productId: productId,
-      quantity: quantity
+      quantity: quantity,
     };
     setSelectedProducts([...selectedProducts, newProduct]);
   };
-  
 
   const handleCheckInChange = (name, checked) => {
     if (checked) {
@@ -116,7 +109,7 @@ const Datatable = ({ singleId }) => {
       setSelectedCostumeIds(updatedIds);
 
       // Establecer el valor del estado costumeIds como un array de cadenas de texto
-      const idsString = updatedIds.join(',');
+      const idsString = updatedIds.join(",");
       setCostumeIds(idsString);
 
       // Mostrar las IDs que se van sumando en la consola
@@ -128,27 +121,30 @@ const Datatable = ({ singleId }) => {
     const selectedRowsData = selectedRows.map((rowId) =>
       data.find((row) => row.id === rowId)
     );
-  
+
     const products = selectedRowsData.map((row) => ({
       productId: row.id,
       quantity: selectedQuantities[row.id] || 1,
     }));
-  
+
     const requestData = {
       type,
       clientId,
       products: selectedProducts,
-      checkIn: checkIn.join(','),
+      checkIn: checkIn.join(","),
     };
-  
+
     const partialPaymentAmount = amount - partialPayment;
-  
+
     axios
-      .post('https://disfracesrosario.up.railway.app/transactions/newTransactionSale', requestData)
-      .then(response => {
+      .post(
+        "https://disfracesrosario.up.railway.app/transactions/newTransactionSale",
+        requestData
+      )
+      .then((response) => {
         const responseData = response.data;
         console.log(responseData);
-  
+
         const remitoData = {
           id: responseData.id,
           amount: responseData.amount,
@@ -168,87 +164,102 @@ const Datatable = ({ singleId }) => {
           const page = pdfDoc.addPage();
           const { width, height } = page.getSize();
           const currentDate = new Date();
-          const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
-        
+          const formattedDate = `${currentDate.getDate()}/${
+            currentDate.getMonth() + 1
+          }/${currentDate.getFullYear()}`;
+
           // Agregar contenido al PDF utilizando la biblioteca pdf-lib
           page.drawText(`Fecha: ${formattedDate}`, { x: 50, y: height - 20 });
           page.drawText(`ID: ${responseData.id}`, { x: 50, y: height - 50 });
-          page.drawText(`Monto: ${responseData.amount}`, { x: 50, y: height - 80 });
-          page.drawText(`Tipo: ${responseData.type}`, { x: 50, y: height - 110 });
-          page.drawText(`Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`, { x: 50, y: height - 140 });
-        
-          page.drawText("Detalles de la transacción:", { x: 50, y: height - 170 });
-        
-        
-          responseData.transactionDetails.forEach((detail, index) => {
-            page.drawText(`Producto: ${detail.product}`, { x: 50, y: height - 200 });
-            page.drawText(`Cantidad: ${detail.quantity}`, { x: 50, y: height - 230 });
-            page.drawText(`Total Unitario: ${detail.totalUnitario}`, { x: 50, y: height - 260 });
-            page.drawText(`Total del Producto: ${detail.totalProduct}`, { x: 50, y: height - 290 });
+          page.drawText(`Monto: ${responseData.amount}`, {
+            x: 50,
+            y: height - 80,
           });
-        
+          page.drawText(`Tipo: ${responseData.type}`, {
+            x: 50,
+            y: height - 110,
+          });
+          page.drawText(
+            `Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`,
+            { x: 50, y: height - 140 }
+          );
+
+          page.drawText("Detalles de la transacción:", {
+            x: 50,
+            y: height - 170,
+          });
+
+          responseData.transactionDetails.forEach((detail, index) => {
+            page.drawText(`Producto: ${detail.product}`, {
+              x: 50,
+              y: height - 200,
+            });
+            page.drawText(`Cantidad: ${detail.quantity}`, {
+              x: 50,
+              y: height - 230,
+            });
+            page.drawText(`Total Unitario: ${detail.totalUnitario}`, {
+              x: 50,
+              y: height - 260,
+            });
+            page.drawText(`Total del Producto: ${detail.totalProduct}`, {
+              x: 50,
+              y: height - 290,
+            });
+          });
+
           // Añadir más campos y detalles según sea necesario
-           
+
           const pdfBytes = await pdfDoc.save();
-        
+
           return pdfBytes;
         };
-        
-        
 
+        // Generar el PDF del remito
+        generateRemitoPDF(responseData)
+          .then((pdfBytes) => {
+            const blob = new Blob([pdfBytes], { type: "application/pdf" });
 
-           // Generar el PDF del remito
-           generateRemitoPDF(responseData)
-           .then(pdfBytes => {
-             const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-   
-             // Descargar el PDF en el navegador del usuario
-             saveAs(blob, 'remito.pdf');
-   
-             setCheckIn([]);
-             
-           })
+            // Descargar el PDF en el navegador del usuario
+            saveAs(blob, "remito.pdf");
 
-           
+            setCheckIn([]);
+          })
 
-      .catch(error => {
-        console.log('Error al generar el PDF:', error);
-      });
-  
+          .catch((error) => {
+            console.log("Error al generar el PDF:", error);
+          });
+
         // Generar el remito utilizando remitoData
-        console.log('Remito:', remitoData);
-  
+        console.log("Remito:", remitoData);
+
         setCheckIn([]);
         alert("Venta realizada correctamente");
-
       })
-      .catch(error => {
+      .catch((error) => {
         alert(error.response.data.details);
         setError(error.response.data.details);
       });
   };
-  
 
   const generateRemitoPDF = async (responseData) => {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage();
     const { width, height } = page.getSize();
-  
+
     // Agregar contenido al PDF utilizando la biblioteca pdf-lib
     page.drawText(`ID: ${responseData.id}`, { x: 50, y: height - 50 });
     // Añadir más campos y detalles según sea necesario
-  
+
     const pdfBytes = await pdfDoc.save();
-  
+
     return pdfBytes;
   };
-
 
   const handleImageUrlChange = (url, clientIdValue) => {
     setImageUrl(url);
     setClientId(clientIdValue);
   };
-
 
   const handleSelect = (id) => {
     // Verificar si la ID ya está seleccionada
@@ -268,12 +279,9 @@ const Datatable = ({ singleId }) => {
     handleSelect(selectedIds);
   };
 
-
   const handleIdChange = (id) => {
     setClientId(id);
   };
-
-
 
   return (
     <div className="datatable">
@@ -282,26 +290,16 @@ const Datatable = ({ singleId }) => {
         <a href="/">Volver a la pantalla</a>
       </button>
       <div className="info-cliente">
-        <BasicGrid onImageUrlChange={handleImageUrlChange} onIdChange={handleIdChange} />
+        <BasicGrid
+          onImageUrlChange={handleImageUrlChange}
+          onIdChange={handleIdChange}
+        />
       </div>
-      <div className="id">
-      </div>
+      <div className="id"></div>
       <div className="tabla">
         <Productos onCostumeSelect={handleCostumeSelect} />
-        <Input
-          color="info"
-          placeholder="IDs de disfraces (separados por comas)"
-          variant="outlined"
-          value={costumeIds}
-          onChange={(event) => {
-            const ids = event.target.value.split(',').map((id) => id.trim());
-            setCostumeIds(ids.join(',')); // Actualizar el estado costumeIds
-          }}
-        />
-
       </div>
-      <div className="info">
-      </div>
+      <div className="info"></div>
       <div className="botones">
         <Input
           color="info"
@@ -322,7 +320,9 @@ const Datatable = ({ singleId }) => {
           <MenuItem value="mercado_pago">Mercado Pago</MenuItem>
           <MenuItem value="efectivo">Efectivo</MenuItem>
           <MenuItem value="tarjeta">Tarjeta</MenuItem>
-          <MenuItem value="factura electronica">Factura electronica (Marcar Casillero)</MenuItem>
+          <MenuItem value="factura electronica">
+            Factura electronica (Marcar Casillero)
+          </MenuItem>
         </TextField>
       </div>
 
@@ -340,7 +340,16 @@ const Datatable = ({ singleId }) => {
               }
               label="Facturación Electrónica"
             />
-            {isInvoiceChecked && <Button variant="outlined" color="info"><a target="_blank" href="https://auth.afip.gob.ar/contribuyente_/login.xhtml?action=SYSTEM&system=rcel">Generar Factura</a></Button>}
+            {isInvoiceChecked && (
+              <Button variant="outlined" color="info">
+                <a
+                  target="_blank"
+                  href="https://auth.afip.gob.ar/contribuyente_/login.xhtml?action=SYSTEM&system=rcel"
+                >
+                  Generar Factura
+                </a>
+              </Button>
+            )}
           </div>
           <Check name="Banco" onCheckInChange={handleCheckInChange} />
           <Check name="Remito" onCheckInChange={handleCheckInChange} />

@@ -4,18 +4,16 @@ import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUpload
 import { useState } from "react";
 import axios from "axios";
 import "./cliente56.scss";
-import { CloudinaryContext, Image, Transformation } from 'cloudinary-react';
-import React, { useRef } from 'react';
+import { CloudinaryContext, Image, Transformation } from "cloudinary-react";
+import React, { useRef } from "react";
 import Dni from "../../components/lectordni/Dni";
 
-
 const New = ({ inputs, title, apiUrl }) => {
-
   const [file, setFile] = useState("");
   const [imagePreview, setImagePreview] = useState("");
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
-  const [dni, setDni] = useState('');
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [dni, setDni] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -58,28 +56,29 @@ const New = ({ inputs, title, apiUrl }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://disfracesrosario.up.railway.app/clients/newClient", JSON.stringify(formData), {
-        headers: {
-          "Content-Type": "application/json", 'Access-Control-Allow-Origin': '*'
-        },
-      })
+      .post(
+        "https://disfracesrosario.up.railway.app/clients/newClient",
+        JSON.stringify(formData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
       .then((response) => {
         console.log(response);
-        alert("Cliente creado correctamente")
-        window.location.href = '/users';
+        alert("Cliente creado correctamente");
+        window.location.href = "/users";
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-
-
 
   return (
     <div className="new">
@@ -90,7 +89,7 @@ const New = ({ inputs, title, apiUrl }) => {
           <h1>{title}</h1>
         </div>
         <div className="dni">
-        <Dni></Dni>
+          <Dni></Dni>
         </div>
         <div className="bottom">
           <div className="left">
@@ -104,31 +103,28 @@ const New = ({ inputs, title, apiUrl }) => {
               style={{
                 width: "500px",
                 height: "400px",
-                borderRadius: "0" // Agrega esta línea para quitar los bordes redondeados
+                borderRadius: "0", // Agrega esta línea para quitar los bordes redondeados
               }}
             />
           </div>
-          
+
           <div className="right">
             <form onSubmit={handleSubmit}>
-            
               <div className="formInput">
                 <label htmlFor="image">Imagen:</label>
-                <input
-                  type="file"
-                  name="image"
-                  onChange={handleFileChange}
-                />
+                <input type="file" name="image" onChange={handleFileChange} />
                 <button
                   type="submit"
-                  className={`submitButton ${isUploading ? 'disabledButton' : ''}`}
+                  className={`submitButton ${
+                    isUploading ? "disabledButton" : ""
+                  }`}
                   onClick={handleImageUpload}
                   disabled={isButtonDisabled}
                 >
                   Subir imagen
                 </button>
               </div>
-             
+
               <div className="formInput">
                 <label>Nombre:</label>
 
