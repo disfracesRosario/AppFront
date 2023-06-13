@@ -17,6 +17,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { DatePicker, Space } from "antd";
 import { FormControlLabel, Checkbox } from "@material-ui/core";
 import { useEffect } from "react";
+import { PDFDocument, StandardFonts } from "pdf-lib";
 
 const Datatable = ({ singleId }) => {
   const [selectedDni, setSelectedDni] = useState(null);

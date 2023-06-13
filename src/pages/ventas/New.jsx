@@ -55,6 +55,14 @@ const Datatable = ({ singleId }) => {
     setType(event.target.value);
   };
 
+  function calculateTotalAmount(products) {
+    let totalAmount = 0;
+    products.forEach((product) => {
+      totalAmount += product.nameProduct * product.quantity;
+    });
+    return totalAmount;
+  }
+
   const handleInvoiceChange = (event) => {
     setIsInvoiceChecked(event.target.checked);
   };
@@ -99,8 +107,9 @@ const Datatable = ({ singleId }) => {
       ...prevQuantities,
       [productId]: quantity,
     }));
-  };
 
+    calculateTotalAmount([...selectedProducts, newProduct]);
+  };
   const handleCheckInChange = (name, checked) => {
     if (checked) {
       setCheckIn([...checkIn, name]);
@@ -202,189 +211,34 @@ const Datatable = ({ singleId }) => {
           );
           const backgroundImage = await pdfDoc.embedPng(imageBytes);
           const fontSize = 9;
+// Agregar contenido al PDF utilizando la biblioteca pdf-lib
+page.drawImage(backgroundImage, { x: 0, y: 0, width: width, height: height, opacity: 1 });
+        
+const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+page.setFont(font);
+page.setFontSize(fontSize);
 
-          // Agregar contenido al PDF utilizando la biblioteca pdf-lib
-          page.drawImage(backgroundImage, {
-            x: 0,
-            y: 0,
-            width: width,
-            height: height,
-            opacity: 1,
-          });
+page.drawText(`Fecha: ${formattedDate}`, { x: 370, y: height - 195, fontSize });
+page.drawText(`Remito N°\n   ${responseData.id}`, { x: 390, y: height - 140, fontSize });
+page.drawText(`TOTAL : ${responseData.amount}`, { x: 365, y: height - 655, fontSize });
+page.drawText(`Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`, { x: 100, y: height - 227, fontSize });
+page.drawText(`DNI: ${responseData.clientDocument}`, { x: 100, y: height - 241, fontSize });
+page.drawText(`Direccion: ${responseData.clientAdress}`, { x: 100, y: height - 255, fontSize });
+page.drawText(`Tipo: ${responseData.type}`, { x: 100, y: height - 269, fontSize });
+page.drawText(`Telefono: ${responseData.clientPhone}`, { x: 100, y: height - 284, fontSize });
+page.drawText(`identificafdor: ${responseData.clientId}`, { x: 100, y: height - 299, fontSize });
+page.drawText(`Observaciones:  ${responseData.detail}`, { x: 100, y: height - 670, fontSize });
+page.drawText("Detalles de la transacción:", { x: 10, y: height - 10, fontSize });
 
-          const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-          page.setFont(font);
-          page.setFontSize(fontSize);
 
-          page.drawText(`Fecha: ${formattedDate}`, {
-            x: 370,
-            y: height - 195,
-            fontSize,
-          });
-          page.drawText(`Remito N°\n   ${responseData.id}`, {
-            x: 390,
-            y: height - 140,
-            fontSize,
-          });
-          page.drawText(`TOTAL : ${responseData.amount}`, {
-            x: 365,
-            y: height - 655,
-            fontSize,
-          });
-          page.drawText(
-            `Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`,
-            { x: 100, y: height - 227, fontSize }
-          );
-          page.drawText(`DNI: ${responseData.clientDocument}`, {
-            x: 100,
-            y: height - 241,
-            fontSize,
-          });
-          page.drawText(`Direccion: ${responseData.clientAdress}`, {
-            x: 100,
-            y: height - 255,
-            fontSize,
-          });
-          page.drawText(`Tipo: ${responseData.type}`, {
-            x: 100,
-            y: height - 269,
-            fontSize,
-          });
-          page.drawText(`Telefono: ${responseData.clientPhone}`, {
-            x: 100,
-            y: height - 284,
-            fontSize,
-          });
-          page.drawText(`identificafdor: ${responseData.clientId}`, {
-            x: 100,
-            y: height - 299,
-            fontSize,
-          });
-          page.drawText(`Observaciones:  ${responseData.detail}`, {
-            x: 100,
-            y: height - 670,
-            fontSize,
-          });
-          page.drawText("Detalles de la transacción:", {
-            x: 10,
-            y: height - 10,
-            fontSize,
-          });
 
-          page.drawText(`Fecha: ${formattedDate}`, {
-            x: 370,
-            y: height - 195,
-            fontSize,
-          });
-          page.drawText(`Remito N°\n   ${responseData.id}`, {
-            x: 390,
-            y: height - 140,
-            fontSize,
-          });
-          page.drawText(`TOTAL : ${responseData.amount}`, {
-            x: 365,
-            y: height - 655,
-            fontSize,
-          });
-          page.drawText(
-            `Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`,
-            { x: 100, y: height - 227, fontSize }
-          );
-          page.drawText(`DNI: ${responseData.clientDocument}`, {
-            x: 100,
-            y: height - 241,
-            fontSize,
-          });
-          page.drawText(`Direccion: ${responseData.clientAdress}`, {
-            x: 100,
-            y: height - 255,
-            fontSize,
-          });
-          page.drawText(`Tipo: ${responseData.type}`, {
-            x: 100,
-            y: height - 269,
-            fontSize,
-          });
-          page.drawText(`Telefono: ${responseData.type}`, {
-            x: 100,
-            y: height - 284,
-            fontSize,
-          });
-          page.drawText(`identificafdor: ${responseData.clientId}`, {
-            x: 100,
-            y: height - 299,
-            fontSize,
-          });
-          page.drawText(`Observaciones:  ${responseData.detail}`, {
-            x: 100,
-            y: height - 670,
-            fontSize,
-          });
-          page.drawText("Detalles de la transacción:", {
-            x: 10,
-            y: height - 10,
-            fontSize,
-          });
-
-          responseData.transactionDetails.forEach((detail, index) => {
-            page.drawText(`${detail.product}`, {
-              x: 170,
-              y: height - 360 - 20 * index,
-              fontSize,
-            });
-            page.drawText(`${detail.quantity}`, {
-              x: 320,
-              y: height - 360 - 20 * index,
-              fontSize,
-            });
-            page.drawText(`${detail.totalUnitario}`, {
-              x: 365,
-              y: height - 360 - 20 * index,
-              fontSize,
-            });
-            page.drawText(`${detail.totalProduct}`, {
-              x: 425,
-              y: height - 360 - 20 * index,
-              fontSize,
-            });
-            page.drawText(`${detail.productId}`, {
-              x: 120,
-              y: height - 360 - 20 * index,
-              fontSize,
-            });
-          });
-          page.drawText(`Tipo: ${responseData.type}`, {
-            x: 50,
-            y: height - 110,
-          });
-          page.drawText(
-            `Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`,
-            { x: 50, y: height - 140 }
-          );
-
-          page.drawText("Detalles de la transacción:", {
-            x: 50,
-            y: height - 170,
-          });
-
-          responseData.transactionDetails.forEach((detail, index) => {
-            page.drawText(`Producto: ${detail.product}`, {
-              x: 50,
-              y: height - 200,
-            });
-            page.drawText(`Cantidad: ${detail.quantity}`, {
-              x: 50,
-              y: height - 230,
-            });
-            page.drawText(`Total Unitario: ${detail.totalUnitario}`, {
-              x: 50,
-              y: height - 260,
-            });
-            page.drawText(`Total del Producto: ${detail.totalProduct}`, {
-              x: 50,
-              y: height - 290,
-            });
-          });
+responseData.transactionDetails.forEach((detail, index) => {
+  page.drawText(`${detail.product}`, { x: 170, y: height - 360 - (20 * index), fontSize });
+  page.drawText(`${detail.quantity}`, { x: 320, y: height - 360 - (20 * index), fontSize });
+  page.drawText(`${detail.totalUnitario}`, { x: 365, y: height - 360 - (20 * index), fontSize });
+  page.drawText(`${detail.totalProduct}`, { x: 425, y: height - 360 - (20 * index), fontSize });
+  page.drawText(`${detail.productId}`, { x: 120, y: height - 360 - (20 * index), fontSize });
+});
 
           // Añadir más campos y detalles según sea necesario
 
@@ -437,25 +291,25 @@ const Datatable = ({ singleId }) => {
     setClientId(clientIdValue);
   };
 
-  const handleSelect = (id) => {
-    // Verificar si la ID ya está seleccionada
-    if (!selectedCostumeIds.includes(id)) {
-      // Añadir la ID seleccionada a la lista de IDs previamente seleccionadas
-      const updatedIds = [...selectedCostumeIds, id];
-      setSelectedCostumeIds(updatedIds);
-      setCostumeIds((prevIds) => [...prevIds, id]); // Agregar la ID del disfraz seleccionado a la matriz costumeIds
-
-      // Mostrar las IDs que se van sumando en la consola
-      console.log(`IDs seleccionadas: ${updatedIds.join(", ")}`);
+  const handleSelect = (id, quantity, name, price) => {
+    const updatedIds = [...selectedCostumeIds];
+    const existingIndex = updatedIds.indexOf(id);
+    
+    if (existingIndex !== -1) {
+      // Si el producto ya está seleccionado, actualiza la cantidad
+      const updatedQuantities = { ...selectedQuantities };
+      updatedQuantities[id] = quantity;
+      setSelectedQuantities(updatedQuantities);
     } else {
-      // Actualiza las cantidades seleccionadas si la ID ya está seleccionada
-      setSelectedQuantities((prevQuantities) => ({
-        ...prevQuantities,
-        [id]: prevQuantities[id] + 1, // Incrementa la cantidad en 1
-      }));
+      // Si el producto no está seleccionado, agrega el nuevo producto a la lista
+      updatedIds.push(id);
+      setSelectedCostumeIds(updatedIds);
+      onCostumeSelect(id, quantity, name, price);
     }
+  
+    console.log(`IDs seleccionadas: ${updatedIds.join(", ")}`);
   };
-
+  
   const handleSelectionChange = (selection) => {
     const selectedIds = selection.map((selectedRow) => selectedRow.id);
     handleSelect(selectedIds);
@@ -549,25 +403,28 @@ const Datatable = ({ singleId }) => {
         <Dialog open={open} onClose={() => setOpen(false)}>
           <DialogTitle>Confirmación de la venta</DialogTitle>
           <DialogContent>
-            {data2 && (
-              <div>
-                <h3>Verifique que los datos de la venta sean correctos:</h3>
-                <p>Monto: {data2.clientName}</p>
-                <p>Tipo: {data2.type}</p>
-                <p>Identificador de cliente: {data2.clientId}</p>
-                <p>Productos:</p>
-                <ul>
-                  {data2.products &&
-                    data2.products.map((product, index) => (
-                      <li key={index}>
-                        {selectedProducts.nameProduct} {product.price},
-                        Cantidad: {product.quantity}, {totalAmount}
-                      </li>
-                    ))}
-                </ul>
-              </div>
-            )}
-          </DialogContent>
+  {data2 && (
+    <div>
+      <h3>Verifique que los datos de la venta sean correctos:</h3>
+      <p>Monto: {data2.clientName}</p>
+      <p>Tipo: {data2.type}</p>
+      <p>Identificador de cliente: {data2.clientId}</p>
+      <p>Productos:</p>
+      <ul>
+        {data2.products &&
+          data2.products.map((product, index) => (
+            <li key={index}>
+              {product.nameProduct} {product.price}, Cantidad:{" "}
+              {product.quantity}  {product.quantity * product.nameProduct}
+            </li>
+          ))}
+      </ul>
+      <p>Monto total: {calculateTotalAmount(data2.products)}</p>
+    </div>
+  )}
+</DialogContent>
+
+
           <DialogActions>
             <Button onClick={() => setOpen(false)} color="primary">
               Cancelar

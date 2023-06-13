@@ -13,13 +13,25 @@ const Datatable2 = ({ onCostumeSelect, selectedCostume }) => { // Paso el estado
   const [selectedQuantities, setSelectedQuantities] = useState({});
   const [selectedProducts, setSelectedProducts] = useState([]); // Define and initialize selectedProducts
 
+
   const handleSelect = (id, quantity, name, price) => {
-    const updatedIds = [...selectedCostumeIds, id];
-    setSelectedCostumeIds(updatedIds);
-    onCostumeSelect(id, quantity, name, price);
-    handleQuantityChange(id, quantity); // Pasa la cantidad seleccionada actualizada
-    console.log(`IDs seleccionadas: ${updatedIds.join(", ")}`);
+    const existingIndex = selectedCostumeIds.indexOf(id);
+  
+    if (existingIndex !== -1) {
+      // El producto ya está seleccionado, actualiza la cantidad
+      handleQuantityChange(id, quantity);
+      console.log(`El producto ${id} ya está seleccionado, se actualizó la cantidad a ${quantity}`);
+    } else {
+      // El producto no está seleccionado, agrega el nuevo producto a la lista
+      const updatedIds = [...selectedCostumeIds, id];
+      setSelectedCostumeIds(updatedIds);
+      onCostumeSelect(id, quantity, name, price);
+      handleQuantityChange(id, quantity);
+      console.log(`IDs seleccionadas: ${updatedIds.join(", ")}`);
+    }
   };
+  
+  
 
 
   const handleSelectionChange = (selection) => {
@@ -27,12 +39,22 @@ const Datatable2 = ({ onCostumeSelect, selectedCostume }) => { // Paso el estado
   };
 
 
-  const handleQuantityChange = (productId, quantity) => {
-    setSelectedQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: quantity,
-    }));
-  };
+const handleQuantityChange = (productId, quantity) => {
+  setSelectedQuantities((prevQuantities) => ({
+    ...prevQuantities,
+    [productId]: quantity,
+  }));
+
+  setSelectedProducts((prevProducts) => {
+    const updatedProducts = prevProducts.map((product) => {
+      if (product.productId === productId) {
+        return { ...product, quantity: quantity };
+      }
+      return product;
+    });
+    return updatedProducts;
+  });
+};
 
 
 
