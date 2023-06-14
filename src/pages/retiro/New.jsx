@@ -9,6 +9,7 @@ import Check from "../check/Check";
 import { Input } from '@mui/joy';
 import Tabla from "../Clientes/Datatable";
 import { Checkbox, FormControlLabel } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 
 const Datatable = ({ singleId, onTransactionIdChange, onIdChange, onTransactionIdImport }) => {
   const [selectedDni, setSelectedDni] = useState(null);
@@ -139,9 +140,9 @@ const Datatable = ({ singleId, onTransactionIdChange, onIdChange, onTransactionI
   return (
     <div className="datatable">
       {error && <p>{error}</p>}
-      <button>
-        <a href="/">Volver</a>
-      </button>
+      <Button variant="contained" endIcon={<SendIcon />}>
+      <a href="/">Volver</a>
+      </Button>
       <Tabla></Tabla>
       <div className="info-cliente">
         <BasicGrid

@@ -24,6 +24,9 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
+import SendIcon from '@mui/icons-material/Send';
+import Stack from '@mui/material/Stack';
+
 
 const Datatable = ({ singleId }) => {
   const [selectedDni, setSelectedDni] = useState(null);
@@ -326,9 +329,9 @@ responseData.transactionDetails.forEach((detail, index) => {
   return (
     <div className="datatable">
       {error && <p>{error}</p>}
-      <button>
-        <a href="/">Volver a la pantalla</a>
-      </button>
+      <Button variant="contained" endIcon={<SendIcon />}>
+      <a href="/">Volver</a>
+      </Button>
       <div className="info-cliente">
         <BasicGrid
           onImageUrlChange={handleImageUrlChange}
@@ -343,13 +346,6 @@ responseData.transactionDetails.forEach((detail, index) => {
       </div>
       <div className="info"></div>
       <div className="botones">
-        <Input
-          color="info"
-          placeholder="Monto"
-          variant="soft"
-          value={amount}
-          onChange={(event) => setAmount(Number(event.target.value))}
-        />
         <TextField
           color="info"
           select

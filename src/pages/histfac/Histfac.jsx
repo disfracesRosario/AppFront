@@ -7,6 +7,9 @@ import axios from "axios";
 import Widget from "../../components/widget3/Widget";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
+import SendIcon from '@mui/icons-material/Send';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 const Datatable = () => {
   const [data, setData] = useState([]);
@@ -79,11 +82,9 @@ const Datatable = () => {
 
   return (
     <div className="datatable">
-      <button>
-        <span>
-          <a href="/">Volver</a>
-        </span>
-      </button>
+      <Button variant="outlined">
+      <a href="/">Volver</a>
+      </Button>
       <div className="datatableTitle">
         <h1>Historial de Facturacion</h1>
       </div>

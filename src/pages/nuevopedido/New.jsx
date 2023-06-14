@@ -18,6 +18,7 @@ import { DatePicker, Space } from "antd";
 import { FormControlLabel, Checkbox } from "@material-ui/core";
 import { useEffect } from "react";
 import { PDFDocument, StandardFonts } from "pdf-lib";
+import SendIcon from '@mui/icons-material/Send';
 
 const Datatable = ({ singleId }) => {
   const [selectedDni, setSelectedDni] = useState(null);
@@ -340,9 +341,9 @@ const Datatable = ({ singleId }) => {
   return (
     <div className="datatable">
       {error && <p>{error}</p>}
-      <button>
-        <a href="/">Volver</a>
-      </button>
+      <Button variant="contained" endIcon={<SendIcon />}>
+      <a href="/">Volver</a>
+      </Button>
       <div className="info-cliente">
         <BasicGrid
           onImageUrlChange={handleImageUrlChange}

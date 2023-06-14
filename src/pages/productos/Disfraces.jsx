@@ -5,6 +5,9 @@ import { userColumns } from "../../tablaproductos";
 import UserTable, { userRows } from "../../tablaproductos";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
+import Stack from '@mui/material/Stack';
 
 const Datatable2 = ({ onCostumeSelect, selectedCostume }) => { // Paso el estado del input como una prop llamada "selectedCostume"
   const [data, setData] = useState([]);
@@ -18,7 +21,7 @@ const Datatable2 = ({ onCostumeSelect, selectedCostume }) => { // Paso el estado
     const existingIndex = selectedCostumeIds.indexOf(id);
   
     if (existingIndex !== -1) {
-      // El producto ya está seleccionado, actualiza la cantidad
+      // El producto ya está seleccionado, sobrescribe la cantidad
       handleQuantityChange(id, quantity);
       console.log(`El producto ${id} ya está seleccionado, se actualizó la cantidad a ${quantity}`);
     } else {
@@ -30,7 +33,6 @@ const Datatable2 = ({ onCostumeSelect, selectedCostume }) => { // Paso el estado
       console.log(`IDs seleccionadas: ${updatedIds.join(", ")}`);
     }
   };
-  
   
 
 
@@ -55,8 +57,6 @@ const handleQuantityChange = (productId, quantity) => {
     return updatedProducts;
   });
 };
-
-
 
   const handleSelectButtonClick = (params) => {
     const costumeId = params.getValue(params.id, "id");
@@ -99,6 +99,7 @@ const handleQuantityChange = (productId, quantity) => {
     };
     setSelectedProducts([...selectedProducts, newProduct]);
   };
+  
 
 
 

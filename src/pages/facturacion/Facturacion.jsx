@@ -5,6 +5,9 @@ import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Widget from "../../components/widget2/Widget";
+import Stack from '@mui/material/Stack';
+import SendIcon from '@mui/icons-material/Send';
+import Button from '@mui/material/Button';
 
 const Datatable = () => {
   const [data, setData] = useState([]);
@@ -71,11 +74,9 @@ const Datatable = () => {
 
   return (
     <div className="datatable">
-      <button>
-        <span>
-          <a href="/">Volver</a>
-        </span>
-      </button>
+    <Button variant="outlined">
+      <a href="/">Volver</a>
+      </Button>
       <div className="datatableTitle">
         <h1>Historial de Facturacion del mes</h1>
       </div>
