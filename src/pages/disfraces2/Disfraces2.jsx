@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./disfraces.scss";
+import "./disfraces2.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { userColumns } from "../../datatablesource2";
 import UserTable, { userRows } from "../../disfra/datatablesource2";

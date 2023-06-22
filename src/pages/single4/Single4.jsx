@@ -1,8 +1,8 @@
-import "./single.scss";
+import "./single4.scss";
 import { useState } from 'react';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
-import List2 from '../../components/lista1/Table';
+import List2 from '../../components/lista1/Lista1';
 
 const Single = () => {
   const [isEditing, setIsEditing] = useState(false);

@@ -4,7 +4,7 @@ import UserTable, { userRows } from "../../datatablesource4";
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Widget from "../../components/widget2/Widget";
+import Widget from "../../components/widget2/Widget2";
 import Stack from '@mui/material/Stack';
 import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/material/Button';

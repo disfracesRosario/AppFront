@@ -1,4 +1,4 @@
-import "./datatable.scss";
+import "./clientes.scss";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
 import { userColumns } from "../../tablaclient";
 import UserTable, { userRows } from "../../tablaclient";
