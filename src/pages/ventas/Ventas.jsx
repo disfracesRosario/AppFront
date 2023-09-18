@@ -55,6 +55,7 @@ const Datatable = ({ singleId }) => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [modalShouldOpenWithData, setModalShouldOpenWithData] = useState(false);
   const [requestData, setRequestData] = useState(null);
+  const [productQuantities, setProductQuantities] = useState({});
 
 
   const handleTypeChange = (event) => {
@@ -109,7 +110,7 @@ const Datatable = ({ singleId }) => {
       nameProduct: nameProduct,
     };
     setSelectedProducts([...selectedProducts, newProduct]);
-    setSelectedQuantities((prevQuantities) => ({
+    setProductQuantities((prevQuantities) => ({
       ...prevQuantities,
       [productId]: quantity,
     }));
@@ -367,7 +368,10 @@ const Datatable = ({ singleId }) => {
       <div className="id"></div>
       <div className="id"></div>
       <div className="tabla">
-        <Productos onCostumeSelect={handleCostumeSelect} />
+        <Productos
+         onCostumeSelect={handleCostumeSelect}
+        selectedQuantities={productQuantities} 
+        />
       </div>
       <div className="info"></div>
       <div className="botones">

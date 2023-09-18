@@ -33,7 +33,6 @@ const Datatable2 = ({ onCostumeSelect, selectedCostume }) => { // Paso el estado
       console.log(`IDs seleccionadas: ${updatedIds.join(", ")}`);
     }
   };
-  
 
 
   const handleSelectionChange = (selection) => {
@@ -41,22 +40,27 @@ const Datatable2 = ({ onCostumeSelect, selectedCostume }) => { // Paso el estado
   };
 
 
-const handleQuantityChange = (productId, quantity) => {
-  setSelectedQuantities((prevQuantities) => ({
-    ...prevQuantities,
-    [productId]: quantity,
-  }));
+  const handleQuantityChange = (productId, quantity) => {
+    setSelectedQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: quantity,
+    }));
 
-  setSelectedProducts((prevProducts) => {
-    const updatedProducts = prevProducts.map((product) => {
-      if (product.productId === productId) {
-        return { ...product, quantity: quantity };
-      }
-      return product;
+    console.log(`Cantidad actualizada para el producto ${productId}: ${quantity}`);
+  
+    setSelectedProducts((prevProducts) => {
+      const updatedProducts = prevProducts.map((product) => {
+        if (product.productId === productId) {
+      
+          return { ...product, quantity: quantity };
+        }
+       
+        return product;
+      });
+      
+      return updatedProducts;
     });
-    return updatedProducts;
-  });
-};
+  };
 
   const handleSelectButtonClick = (params) => {
     const costumeId = params.getValue(params.id, "id");
@@ -125,6 +129,7 @@ const handleQuantityChange = (productId, quantity) => {
                     const costumeId = params.getValue(params.id, "id");
                     const newQuantity = parseInt(event.target.value);
                     handleQuantityChange(costumeId, newQuantity); // Actualizar la cantidad seleccionada en el estado
+                    console.log(`RETORNO ${costumeId}: ${newQuantity}`);
                   }}
                 />
               ),
