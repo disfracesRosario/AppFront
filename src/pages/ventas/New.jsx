@@ -53,6 +53,9 @@ const Datatable = ({ singleId }) => {
   const [data2, setData2] = useState(null);
   const [clientName, setClientName] = useState("");
   const [totalAmount, setTotalAmount] = useState(0);
+  const [modalShouldOpenWithData, setModalShouldOpenWithData] = useState(false);
+  const [requestData, setRequestData] = useState(null);
+
 
   const handleTypeChange = (event) => {
     setType(event.target.value);
@@ -167,18 +170,39 @@ const Datatable = ({ singleId }) => {
 
     const partialPaymentAmount = amount - partialPayment;
 
-    setOpen(true);
     setData2(requestData);
     console.log(data2);
+    if (selectedProducts.length === 0) {
+      alert("Seleccione al menos un producto para la venta.");
+      return;
+    }
+    setModalShouldOpenWithData(true);
+    setOpen(true);
+  };
 
-    axios
-      .post(
-        "https://disfracesrosario.up.railway.app/transactions/newTransactionSale",
-        requestData
-      )
-      .then((response) => {
+
+  const handleConfirmSale = () => {
+    // Establece el estado de requestData
+    setRequestData({
+      type,
+      clientId,
+      products: selectedProducts,
+      checkIn: checkIn.join(","),
+    });
+  };
+  useEffect(() => {
+    if (requestData !== null) {
+      // Realiza acciones que dependan de requestData aquí
+      axios
+        .post(
+          "https://disfracesrosario.up.railway.app/transactions/newTransactionSale",
+          requestData
+        )
+        .then((response) => {
         const responseData = response.data;
         console.log(responseData);
+        setOpen(true);  // abre el modal 
+
 
         const remitoData = {
           id: responseData.id,
@@ -202,9 +226,8 @@ const Datatable = ({ singleId }) => {
           const page = pdfDoc.addPage([595.28, 841.89]);
           const { width, height } = page.getSize();
           const currentDate = new Date();
-          const formattedDate = `${currentDate.getDate()}/${
-            currentDate.getMonth() + 1
-          }/${currentDate.getFullYear()}`;
+          const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1
+            }/${currentDate.getFullYear()}`;
 
           // Cargar la imagen de fondo
           const imageUrl =
@@ -214,34 +237,34 @@ const Datatable = ({ singleId }) => {
           );
           const backgroundImage = await pdfDoc.embedPng(imageBytes);
           const fontSize = 9;
-// Agregar contenido al PDF utilizando la biblioteca pdf-lib
-page.drawImage(backgroundImage, { x: 0, y: 0, width: width, height: height, opacity: 1 });
-        
-const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-page.setFont(font);
-page.setFontSize(fontSize);
+          // Agregar contenido al PDF utilizando la biblioteca pdf-lib
+          page.drawImage(backgroundImage, { x: 0, y: 0, width: width, height: height, opacity: 1 });
 
-page.drawText(`Fecha: ${formattedDate}`, { x: 370, y: height - 195, fontSize });
-page.drawText(`Remito N°\n   ${responseData.id}`, { x: 390, y: height - 140, fontSize });
-page.drawText(`TOTAL : ${responseData.amount}`, { x: 365, y: height - 655, fontSize });
-page.drawText(`Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`, { x: 100, y: height - 227, fontSize });
-page.drawText(`DNI: ${responseData.clientDocument}`, { x: 100, y: height - 241, fontSize });
-page.drawText(`Direccion: ${responseData.clientAdress}`, { x: 100, y: height - 255, fontSize });
-page.drawText(`Tipo: ${responseData.type}`, { x: 100, y: height - 269, fontSize });
-page.drawText(`Telefono: ${responseData.clientPhone}`, { x: 100, y: height - 284, fontSize });
-page.drawText(`identificafdor: ${responseData.clientId}`, { x: 100, y: height - 299, fontSize });
-page.drawText(`Observaciones:  ${responseData.detail}`, { x: 100, y: height - 670, fontSize });
-page.drawText("Detalles de la transacción:", { x: 10, y: height - 10, fontSize });
+          const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+          page.setFont(font);
+          page.setFontSize(fontSize);
+
+          page.drawText(`Fecha: ${formattedDate}`, { x: 370, y: height - 195, fontSize });
+          page.drawText(`Remito N°\n   ${responseData.id}`, { x: 390, y: height - 140, fontSize });
+          page.drawText(`TOTAL : ${responseData.amount}`, { x: 365, y: height - 655, fontSize });
+          page.drawText(`Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`, { x: 100, y: height - 227, fontSize });
+          page.drawText(`DNI: ${responseData.clientDocument}`, { x: 100, y: height - 241, fontSize });
+          page.drawText(`Direccion: ${responseData.clientAdress}`, { x: 100, y: height - 255, fontSize });
+          page.drawText(`Tipo: ${responseData.type}`, { x: 100, y: height - 269, fontSize });
+          page.drawText(`Telefono: ${responseData.clientPhone}`, { x: 100, y: height - 284, fontSize });
+          page.drawText(`identificafdor: ${responseData.clientId}`, { x: 100, y: height - 299, fontSize });
+          page.drawText(`Observaciones:  ${responseData.detail}`, { x: 100, y: height - 670, fontSize });
+          page.drawText("Detalles de la transacción:", { x: 10, y: height - 10, fontSize });
 
 
 
-responseData.transactionDetails.forEach((detail, index) => {
-  page.drawText(`${detail.product}`, { x: 170, y: height - 360 - (20 * index), fontSize });
-  page.drawText(`${detail.quantity}`, { x: 320, y: height - 360 - (20 * index), fontSize });
-  page.drawText(`${detail.totalUnitario}`, { x: 365, y: height - 360 - (20 * index), fontSize });
-  page.drawText(`${detail.totalProduct}`, { x: 425, y: height - 360 - (20 * index), fontSize });
-  page.drawText(`${detail.productId}`, { x: 120, y: height - 360 - (20 * index), fontSize });
-});
+          responseData.transactionDetails.forEach((detail, index) => {
+            page.drawText(`${detail.product}`, { x: 170, y: height - 360 - (20 * index), fontSize });
+            page.drawText(`${detail.quantity}`, { x: 320, y: height - 360 - (20 * index), fontSize });
+            page.drawText(`${detail.totalUnitario}`, { x: 365, y: height - 360 - (20 * index), fontSize });
+            page.drawText(`${detail.totalProduct}`, { x: 425, y: height - 360 - (20 * index), fontSize });
+            page.drawText(`${detail.productId}`, { x: 120, y: height - 360 - (20 * index), fontSize });
+          });
 
           // Añadir más campos y detalles según sea necesario
 
@@ -280,6 +303,7 @@ responseData.transactionDetails.forEach((detail, index) => {
         // Generar el remito utilizando remitoData
         console.log("Remito:", remitoData);
 
+        setOpen(false);  // cierro el modal una vez terminada la venta
         setCheckIn([]);
         alert("Venta realizada correctamente");
       })
@@ -287,7 +311,8 @@ responseData.transactionDetails.forEach((detail, index) => {
         alert(error.response.data.details);
         setError(error.response.data.details);
       });
-  };
+  }
+}, [requestData]);
 
   const handleImageUrlChange = (url, clientIdValue) => {
     setImageUrl(url);
@@ -297,7 +322,7 @@ responseData.transactionDetails.forEach((detail, index) => {
   const handleSelect = (id, quantity, name, price) => {
     const updatedIds = [...selectedCostumeIds];
     const existingIndex = updatedIds.indexOf(id);
-    
+
     if (existingIndex !== -1) {
       // Si el producto ya está seleccionado, actualiza la cantidad
       const updatedQuantities = { ...selectedQuantities };
@@ -309,10 +334,10 @@ responseData.transactionDetails.forEach((detail, index) => {
       setSelectedCostumeIds(updatedIds);
       onCostumeSelect(id, quantity, name, price);
     }
-  
+
     console.log(`IDs seleccionadas: ${updatedIds.join(", ")}`);
   };
-  
+
   const handleSelectionChange = (selection) => {
     const selectedIds = selection.map((selectedRow) => selectedRow.id);
     handleSelect(selectedIds);
@@ -330,7 +355,7 @@ responseData.transactionDetails.forEach((detail, index) => {
     <div className="datatable">
       {error && <p>{error}</p>}
       <Button variant="contained" endIcon={<SendIcon />}>
-      <a href="/">Volver</a>
+        <a href="/">Volver</a>
       </Button>
       <div className="info-cliente">
         <BasicGrid
@@ -395,38 +420,41 @@ responseData.transactionDetails.forEach((detail, index) => {
       </div>
 
       <div className="final">
-        <Button onClick={() => setOpen(true)}>Aceptar</Button>
+        <Button onClick={handleAccept} color="primary">
+          Aceptar
+        </Button>
         <Dialog open={open} onClose={() => setOpen(false)}>
+          {/* Contenido del modal */}
           <DialogTitle>Confirmación de la venta</DialogTitle>
           <DialogContent>
-  {data2 && (
-    <div>
-      <h3>Verifique que los datos de la venta sean correctos:</h3>
-      <p>Monto: {data2.clientName}</p>
-      <p>Tipo: {data2.type}</p>
-      <p>Identificador de cliente: {data2.clientId}</p>
-      <p>Productos:</p>
-      <ul>
-        {data2.products &&
-          data2.products.map((product, index) => (
-            <li key={index}>
-              {product.nameProduct} {product.price}, Cantidad:{" "}
-              {product.quantity}  {product.quantity * product.nameProduct}
-            </li>
-          ))}
-      </ul>
-      <p>Monto total: {calculateTotalAmount(data2.products)}</p>
-    </div>
-  )}
-</DialogContent>
+            {modalShouldOpenWithData && data2 && (
+              <div>
+                <h3>Verifique que los datos de la venta sean correctos:</h3>
+                <p>Monto: {data2.clientName}</p>
+                <p>Tipo: {data2.type}</p>
+                <p>Identificador de cliente: {data2.clientId}</p>
+                <p>Productos:</p>
+                <ul>
+                  {data2.products &&
+                    data2.products.map((product, index) => (
+                      <li key={index}>
+                        {product.nameProduct} {product.price}, Cantidad:{" "}
+                        {product.quantity} {product.quantity * product.nameProduct}
+                      </li>
+                    ))}
+                </ul>
+                <p>Monto total: {calculateTotalAmount(data2.products)}</p>
+              </div>
+            )}
+          </DialogContent>
 
 
           <DialogActions>
             <Button onClick={() => setOpen(false)} color="primary">
               Cancelar
             </Button>
-            <Button onClick={handleAccept} color="primary">
-              Aceptar
+            <Button onClick={handleConfirmSale} color="primary">
+              Confirmar venta
             </Button>
           </DialogActions>
         </Dialog>
