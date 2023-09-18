@@ -19,6 +19,7 @@ import { FormControlLabel, Checkbox } from "@material-ui/core";
 import { useEffect } from "react";
 import { PDFDocument, StandardFonts } from "pdf-lib";
 import SendIcon from '@mui/icons-material/Send';
+import { saveAs } from "file-saver";
 
 const Datatable = ({ singleId }) => {
   const [selectedDni, setSelectedDni] = useState(null);

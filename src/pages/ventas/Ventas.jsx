@@ -307,6 +307,7 @@ const Datatable = ({ singleId }) => {
         setOpen(false);  // cierro el modal una vez terminada la venta
         setCheckIn([]);
         alert("Venta realizada correctamente");
+        
       })
       .catch((error) => {
         alert(error.response.data.details);
@@ -350,6 +351,11 @@ const Datatable = ({ singleId }) => {
 
   const handleNameChange = (name) => {
     setClientName(name);
+  };
+
+  const handleCancel = () => {
+    alert('la pagina se reiniciará para volver a cargar el pedido, este pedido no será registrado')
+    window.location.reload(); // Recarga la página
   };
 
   return (
@@ -454,7 +460,7 @@ const Datatable = ({ singleId }) => {
 
 
           <DialogActions>
-            <Button onClick={() => setOpen(false)} color="primary">
+            <Button onClick={(handleCancel)} color="primary">
               Cancelar
             </Button>
             <Button onClick={handleConfirmSale} color="primary">
