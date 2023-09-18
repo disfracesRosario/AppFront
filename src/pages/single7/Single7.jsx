@@ -1,4 +1,4 @@
-import "./single.scss";
+import "./single7.scss";
 import * as React from 'react';
 import { styled } from '@mui/joy/styles';
 import Sheet from '@mui/joy/Sheet';

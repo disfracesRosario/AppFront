@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import List2 from '../lista/ListaDis';
-import "./single.scss";
+import "./single8.scss";
 
 const Single2 = () => {
 

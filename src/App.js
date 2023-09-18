@@ -3,26 +3,26 @@ import Login from "./pages/login/Login";
 import List from "./pages/list/List";
 import Usuarios from "./components/datatable/Datatable";
 import Single from "./pages/single/Single";
-import Single2 from "./pages/single2/Single"
-import Single3 from "./pages/single3/Single";
-import Single4 from "./pages/single4/Single";
-import Single5 from "./pages/single5/Single";
-import Single8 from "./pages/single8/Single";
-import Single9 from "./pages/single9/Single";
+import Single2 from "./pages/single2/Single2"
+import Single3 from "./pages/single3/Single3";
+import Single4 from "./pages/single4/Single4";
+import Single5 from "./pages/single5/Single5";
+import Single8 from "./pages/single8/Single8";
+import Single9 from "./pages/single9/Single9";
 import New from "./pages/new/New";
-import New2 from "./pages/new2/New";
-import Ventas from "./pages/ventas/New"; 
+import New2 from "./pages/new2/New2";
+import Ventas from "./pages/ventas/Ventas"; 
 
 
-import Nuevafac from "./pages/nuevafac/New";
+import Nuevafac from "./pages/nuevafac/Nuevafac";
 import Facturacion from "./pages/facturacion/Facturacion";
 import Disfraces from "./components/disfraces/Disfraces";
-import Productos from "./components/productos/Disfraces";
+import Productos from "./components/productos/Productos";
 import Histfac from "./pages/histfac/Histfac";
 import Factele from "./pages/factele/Factele";
-import New3 from "./pages/nuevopedido/New";
-import New4 from "./pages/retiro/New";
-import New5 from "./pages/new3/New";
+import New3 from "./pages/nuevopedido/NuevoPedido";
+import New4 from "./pages/retiro/Retiro";
+import New5 from "./pages/new3/New3";
 
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";

@@ -3,7 +3,7 @@ import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState } from "react";
 import axios from "axios";
-import "./new.scss";
+import "./new3.scss";
 import { CloudinaryContext, Image, Transformation } from 'cloudinary-react';
 
 const New = ({ inputs, title, apiUrl }) => {

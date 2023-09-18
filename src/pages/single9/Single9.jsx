@@ -3,28 +3,24 @@ import { useParams } from 'react-router-dom';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import List2 from '../lista/ListaDis';
-import "./single.scss";
+import "./single9.scss";
 
-const Single2 = () => {
+const Single = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [details, setDetails] = useState({
     id: '',
     name: '',
-    colour: '',
-    detail: '',
-    creationDay: '',
-    status: '',
-    lastClientRented: '',
+    productDescription: '',
+    price: '',
+    stock: '',
     image:'',
   });
   const [editedDetails, setEditedDetails] = useState({
     id: '',
     name: '',
-    colour: '',
-    detail: '',
-    creationDay: '',
-    status: '',
-    lastClientRented: '',
+    productDescription: '',
+    price: '',
+    stock: '',
     image:'',
   });
   
@@ -33,7 +29,7 @@ const Single2 = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(`https://disfracesrosario.up.railway.app/costumes/${id}`);
+      const response = await fetch(`https://disfracesrosario.up.railway.app/products/${id}`);
       const data = await response.json();
       setDetails(data);
     }
@@ -53,7 +49,7 @@ const Single2 = () => {
   }
 
   const handleSaveClick = async () => {
-    const response = await fetch(`https://disfracesrosario.up.railway.app/costumes/${id}`, {
+    const response = await fetch(`https://disfracesrosario.up.railway.app/products/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -88,7 +84,7 @@ const Single2 = () => {
             <h1 className="title1">Informacion</h1>
             <div className="item">
               <div className="details">
-                <h1 className="itemTitle">Disfraz</h1>
+                <h1 className="itemTitle">Productos</h1>
                 <div className="detailItem">
                   <div className="detailItem">
                     <span className="itemKey">ID:</span>
@@ -112,52 +108,32 @@ const Single2 = () => {
                   </span>
                 </div>
                 <div className="detailItem">
-                  <span className="itemKey">Color:</span>
+                  <span className="itemKey">Descripcion:</span>
                   <span className="itemValue">
                     {isEditing ? (
-                      <input type="text" name="colour" value={editedDetails.colour} onChange={handleInputChange} />
+                      <input type="text" name="productDescription" value={editedDetails.productDescription} onChange={handleInputChange} />
                     ) : (
-                      details.colour
+                      details.productDescription
                     )}
                   </span>
                 </div>
                 <div className="detailItem">
-                  <span className="itemKey">Detalle:</span>
+                  <span className="itemKey">Precio:</span>
                   <span className="itemValue">
                     {isEditing ? (
-                      <input type="text" name="detail" value={editedDetails.detail} onChange={handleInputChange} />
+                      <input type="text" name="price" value={editedDetails.price} onChange={handleInputChange} />
                     ) : (
-                      details.detail
+                      details.price
                     )}
                   </span>
                 </div>
                 <div className="detailItem">
-                  <span className="itemKey">Dia de creacion:</span>
+                  <span className="itemKey">Stock:</span>
                   <span className="itemValue">
                     {isEditing ? (
-                      <input type="text" name="creationDay" value={editedDetails.creationDay} onChange={handleInputChange} />
+                      <input type="text" name="stock" value={editedDetails.stock} onChange={handleInputChange} />
                     ) : (
-                      details.creationDay
-                    )}
-                  </span>
-                </div>
-                <div className="detailItem">
-                  <span className="itemKey">Estatus:</span>
-                  <span className="itemValue">
-                    {isEditing ? (
-                      <input type="text" name="status" value={editedDetails.status} onChange={handleInputChange} />
-                    ) : (
-                      details.status
-                    )}
-                  </span>
-                </div>
-                <div className="detailItem">
-                  <span className="itemKey">Ultimo Cliente:</span>
-                  <span className="itemValue">
-                    {isEditing ? (
-                      <input type="text" name="lastClientRented" value={editedDetails.lastClientRented} onChange={handleInputChange} />
-                    ) : (
-                      details.lastClientRented
+                      details.stock
                     )}
                   </span>
                 </div>
@@ -169,12 +145,11 @@ const Single2 = () => {
           </div>
         </div>
         <div className="bottom">
-          <h1 className="title">Historial de Alquileres</h1>
+          <h1 className="title"></h1>
         </div>
-        <List2/>
       </div>
     </div>
   );
 };
 
-export default Single2;
+export default Single;

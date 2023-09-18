@@ -1,13 +1,13 @@
-import "./new2.scss";
+import "./retiro.scss";
 import * as React from 'react';
 import { userColumns, userRows } from "../../datatablesource2";
 import { useState, useEffect } from "react";
-import Single7 from "../single7/Single";
+import Single7 from "../single7/Single7";
 import Button from '@mui/joy/Button';
-import BasicGrid from "../../pages/single7/Single";
+import BasicGrid from "../single7/Single7";
 import Check from "../check/Check";
 import { Input } from '@mui/joy';
-import Tabla from "../Clientes/Datatable";
+import Tabla from "../Clientes/Clientes";
 import { Checkbox, FormControlLabel } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 

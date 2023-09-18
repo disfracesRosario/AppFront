@@ -3,24 +3,28 @@ import { useParams } from 'react-router-dom';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import List2 from '../lista/ListaDis';
-import "./single.scss";
+import "./single2.scss";
 
-const Single = () => {
+const Single2 = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [details, setDetails] = useState({
     id: '',
     name: '',
-    productDescription: '',
-    price: '',
-    stock: '',
+    colour: '',
+    detail: '',
+    creationDay: '',
+    status: '',
+    lastClientRented: '',
     image:'',
   });
   const [editedDetails, setEditedDetails] = useState({
     id: '',
     name: '',
-    productDescription: '',
-    price: '',
-    stock: '',
+    colour: '',
+    detail: '',
+    creationDay: '',
+    status: '',
+    lastClientRented: '',
     image:'',
   });
   
@@ -29,7 +33,7 @@ const Single = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(`https://disfracesrosario.up.railway.app/products/${id}`);
+      const response = await fetch(`https://disfracesrosario.up.railway.app/costumes/${id}`);
       const data = await response.json();
       setDetails(data);
     }
@@ -49,7 +53,7 @@ const Single = () => {
   }
 
   const handleSaveClick = async () => {
-    const response = await fetch(`https://disfracesrosario.up.railway.app/products/${id}`, {
+    const response = await fetch(`https://disfracesrosario.up.railway.app/costumes/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -84,7 +88,7 @@ const Single = () => {
             <h1 className="title1">Informacion</h1>
             <div className="item">
               <div className="details">
-                <h1 className="itemTitle">Productos</h1>
+                <h1 className="itemTitle">Disfraz</h1>
                 <div className="detailItem">
                   <div className="detailItem">
                     <span className="itemKey">ID:</span>
@@ -108,32 +112,52 @@ const Single = () => {
                   </span>
                 </div>
                 <div className="detailItem">
-                  <span className="itemKey">Descripcion:</span>
+                  <span className="itemKey">Color:</span>
                   <span className="itemValue">
                     {isEditing ? (
-                      <input type="text" name="productDescription" value={editedDetails.productDescription} onChange={handleInputChange} />
+                      <input type="text" name="colour" value={editedDetails.colour} onChange={handleInputChange} />
                     ) : (
-                      details.productDescription
+                      details.colour
                     )}
                   </span>
                 </div>
                 <div className="detailItem">
-                  <span className="itemKey">Precio:</span>
+                  <span className="itemKey">Detalle:</span>
                   <span className="itemValue">
                     {isEditing ? (
-                      <input type="text" name="price" value={editedDetails.price} onChange={handleInputChange} />
+                      <input type="text" name="detail" value={editedDetails.detail} onChange={handleInputChange} />
                     ) : (
-                      details.price
+                      details.detail
                     )}
                   </span>
                 </div>
                 <div className="detailItem">
-                  <span className="itemKey">Stock:</span>
+                  <span className="itemKey">Dia de creacion:</span>
                   <span className="itemValue">
                     {isEditing ? (
-                      <input type="text" name="stock" value={editedDetails.stock} onChange={handleInputChange} />
+                      <input type="text" name="creationDay" value={editedDetails.creationDay} onChange={handleInputChange} />
                     ) : (
-                      details.stock
+                      details.creationDay
+                    )}
+                  </span>
+                </div>
+                <div className="detailItem">
+                  <span className="itemKey">Estatus:</span>
+                  <span className="itemValue">
+                    {isEditing ? (
+                      <input type="text" name="status" value={editedDetails.status} onChange={handleInputChange} />
+                    ) : (
+                      details.status
+                    )}
+                  </span>
+                </div>
+                <div className="detailItem">
+                  <span className="itemKey">Ultimo Cliente:</span>
+                  <span className="itemValue">
+                    {isEditing ? (
+                      <input type="text" name="lastClientRented" value={editedDetails.lastClientRented} onChange={handleInputChange} />
+                    ) : (
+                      details.lastClientRented
                     )}
                   </span>
                 </div>
@@ -145,11 +169,12 @@ const Single = () => {
           </div>
         </div>
         <div className="bottom">
-          <h1 className="title"></h1>
+          <h1 className="title">Historial de Alquileres</h1>
         </div>
+        <List2/>
       </div>
     </div>
   );
 };
 
-export default Single;
+export default Single2;

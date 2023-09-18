@@ -4,7 +4,7 @@ import UserTable, { userRows } from "../../datatablesource3";
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Widget from "../../components/widget3/Widget";
+import Widget from "../../components/widget3/Widget3";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import SendIcon from '@mui/icons-material/Send';
