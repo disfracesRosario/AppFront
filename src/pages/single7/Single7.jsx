@@ -13,7 +13,10 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-
+import TablePagination from '@mui/material/TablePagination'; // Importa la paginación
+import IconButton from '@mui/material/IconButton'; // Importa IconButton
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'; // Importa icono de flecha izquierda
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'; // Importa icono de flecha derecha
 const Item = styled(Sheet)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -21,6 +24,7 @@ const Item = styled(Sheet)(({ theme }) => ({
   color: "black",
   backgroundColor: "#e7e7e7"
 }));
+
 
 export default function BasicGrid({ onImageUrlChange, onIdChange, onTransactionIdChange, onDocumentNumberChange }) {
   const [documentNumber, setDocumentNumber] = useState('');
@@ -30,6 +34,18 @@ export default function BasicGrid({ onImageUrlChange, onIdChange, onTransactionI
   const [transactionId, setTransactionId] = useState("");
   const [dni, setDni] = useState('');
   const [searchDni, setSearchDni] = useState('');
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Cambia esto al número de elementos por página que deseas
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   // Función para manejar el cambio del ID del cliente
   const handleDocumentNumberChange = (value) => {
@@ -120,7 +136,9 @@ export default function BasicGrid({ onImageUrlChange, onIdChange, onTransactionI
               </TableRow>
             </TableHead>
             <TableBody>
-              {clientData && clientData.transactions && clientData.transactions.map((costume) => (
+            {clientData.transactions
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Realiza el corte según la página actual y los elementos por página
+                .map((costume) => (
                 <TableRow key={costume.id} style={{ minWidth: '10px' }}>
                   <TableCell style={{ minWidth: '25px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{costume.id}</TableCell>
                   <TableCell style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{costume.names}</TableCell>
@@ -141,6 +159,26 @@ export default function BasicGrid({ onImageUrlChange, onIdChange, onTransactionI
               ))}
             </TableBody>
           </Table>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 50]}
+            component="div"
+            count={clientData.transactions.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            // Agrega los botones de "Anterior" y "Siguiente"
+            ActionsComponent={({ onPageChange, page }) => (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <IconButton onClick={() => onPageChange(page - 1)} disabled={page === 0}>
+                  <KeyboardArrowLeft />
+                </IconButton>
+                <IconButton onClick={() => onPageChange(page + 1)} disabled={page >= Math.ceil(clientData.transactions.length / rowsPerPage) - 1}>
+                  <KeyboardArrowRight />
+                </IconButton>
+              </div>
+            )}
+          />
         </TableContainer>
       }
     </div>

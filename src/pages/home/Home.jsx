@@ -43,7 +43,7 @@ const Home = () => {
               <span className="icon arrow"></span>
             </span>
             <Link to="/nuevopedido" style={{ textDecoration: "none" }}>
-              <span className="button-text">Nuevo Pedido</span>
+              <span className="button-text">Nuevo Alquiler</span>
             </Link>
           </button>
           <button className="learn-more2">
