@@ -11,44 +11,11 @@ import TextField from "@mui/material/TextField";
 const List = () => {
   const [searchText, setSearchText] = useState("");
   const [data, setData] = useState([]);
-  const [hasShownDeadlineAlert, setHasShownDeadlineAlert] = useState(false);
-  const [hasShownTwoDayAlert, setHasShownTwoDayAlert] = useState(false);
 
   function handleSearchTextChange(event) {
     const newSearchText = event.target.value;
     setSearchText(newSearchText);
   }
-
-
-  function checkDeadline(deadlineDate) {
-    if (!deadlineDate) {
-      return "-";
-    }
-
-    const today = new Date();
-    const deadline = new Date(deadlineDate);
-    const isDeadlinePassed = today > deadline;
-
-    if (isDeadlinePassed && !hasShownDeadlineAlert) {
-      alert("¡Hay disfraces que han pasado su fecha límite!");
-      setHasShownDeadlineAlert(true);
-    } else if (
-      !isDeadlinePassed &&
-      Math.abs(deadline - today) / (1000 * 60 * 60 * 24) <= 2 &&
-      !hasShownTwoDayAlert
-    ) {
-      alert("¡Hay disfraces que deben retirarse en los próximos dos días!");
-      setHasShownTwoDayAlert(true);
-    }
-
-    return (
-      <span style={{ color: isDeadlinePassed ? "red" : "black" }}>
-        {deadline.toLocaleDateString()}
-      </span>
-    );
-  }
-
-
 
   useEffect(() => {
     fetch("https://disfracesrosario.up.railway.app/costumes")
@@ -56,17 +23,23 @@ const List = () => {
       .then((data) => setData(data));
   }, []);
 
-  const filteredRows = data.filter(
-    (row) =>
-      row.id.toString().match(new RegExp(searchText, "i")) ||
-      (row.name && row.name.toString().match(new RegExp(searchText, "i"))) || // Agregar comprobación de nulidad y convertir a string
-      (row.detail && row.detail.toString().match(new RegExp(searchText, "i"))) || // Agregar comprobación de nulidad y convertir a string
-      (row.clientRented && row.clientRented.toString().match(new RegExp(searchText, "i"))) || // Agregar comprobación de nulidad y convertir a string
-      (row.reservationDate && row.reservationDate.toString().match(new RegExp(searchText, "i"))) || // Agregar comprobación de nulidad y convertir a string
-      (row.deadlineDate && row.deadlineDate.toString().match(new RegExp(searchText, "i"))) || // Agregar comprobación de nulidad y convertir a string
-      (row.costumeStatus && row.costumeStatus.toString().match(new RegExp(searchText, "i"))) // Agregar comprobación de nulidad y convertir a string
-  );
+  const today = new Date(); // Obtener la fecha actual
 
+  const alertTitle = "Mi Título Personalizado"; // Personaliza el título de las alertas
+
+  useEffect(() => {
+    data.forEach((row) => {
+      if (row.costumeStatus === "ALQUILADO" && today > new Date(row.deadlineDate)) {
+        alert(`${alertTitle}: ¡Cuidado! El disfraz ${row.name} alquilado aún no ha sido devuelto!`);
+      } else if (
+        row.costumeStatus === "RESERVADO" &&
+        today.getTime() + 24 * 60 * 60 * 1000 >
+          new Date(row.reservationDate).getTime()
+      ) {
+        alert(`${alertTitle}: ¡Alerta! Queda 1 día para retirar el disfraz ${row.name} reservado!`);
+      }
+    });
+  }, [data, today, alertTitle]);
 
   return (
     <>
@@ -90,7 +63,7 @@ const List = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredRows.map((row) => (
+            {data.map((row) => (
               <TableRow key={row.id}>
                 <TableCell>{row.id}</TableCell>
                 <TableCell>
@@ -103,8 +76,8 @@ const List = () => {
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.detail}</TableCell>
                 <TableCell>{row.clientRented || "-"}</TableCell>
-                <TableCell>{checkDeadline(row.reservationDate)}</TableCell>
-                <TableCell>{checkDeadline(row.deadlineDate)}</TableCell>
+                <TableCell>{new Date(row.deadlineDate).toLocaleDateString()}</TableCell>
+                <TableCell>{new Date(row.reservationDate).toLocaleDateString()}</TableCell>
                 <TableCell style={{ color: row.costumeStatus === 'ALQUILADO' ? 'green' : row.costumeStatus === 'RESERVADO' ? 'blue' : 'goldenrod' }}>
                   <span className={`status ${row.costumeStatus}`}>
                     {row.costumeStatus}
