@@ -54,7 +54,7 @@ export default function BasicGrid({ onImageUrlChange, onIdChange, onTransactionI
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`https://disfracesrosario.up.railway.app/clients/${documentNumber}/history`);
+      const response = await axios.get(`https://disfracesrosario.up.railway.app/clients/${documentNumber}/historyCostume`);
       console.log(response.data);
       setClientData(response.data);
       const imageUrl = response.data.imageUrl;
@@ -74,7 +74,7 @@ export default function BasicGrid({ onImageUrlChange, onIdChange, onTransactionI
 
     } catch (error) {
       console.error(error);
-      alert("La ID no existe")
+      alert("El numero identificador de cliente no existe")
     }
   };
 
@@ -93,6 +93,20 @@ export default function BasicGrid({ onImageUrlChange, onIdChange, onTransactionI
     onIdChange(costume.costumeIds);
     alert("Disfraz seleccionado");
     console.log("Datos de la transacción:", costume);
+  }
+  function formatDate(dateString) {
+    // Convierte la cadena de fecha a un objeto Date
+    const date = new Date(dateString);
+  
+    // Obtiene las partes de la fecha (día, mes, año, hora, minutos, segundos)
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // +1 porque los meses van de 0 a 11
+    const year = date.getFullYear();
+    const hours = date.getHours();
+  
+  
+    // Formatea la fecha con separadores (por ejemplo, "dd/mm/yyyy hh:mm:ss")
+    return `${day.toString().padStart(2, "0")}/${month.toString().padStart(2, "0")}/${year}`;
   }
 
   return (
@@ -142,8 +156,8 @@ export default function BasicGrid({ onImageUrlChange, onIdChange, onTransactionI
                 <TableRow key={costume.id} style={{ minWidth: '10px' }}>
                   <TableCell style={{ minWidth: '25px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{costume.id}</TableCell>
                   <TableCell style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{costume.names}</TableCell>
-                  <TableCell style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{costume.reservationDate}</TableCell>
-                  <TableCell style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{costume.deadline}</TableCell>
+                  <TableCell style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}> {formatDate(costume.reservationDate)}</TableCell>
+                  <TableCell style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{formatDate(costume.deadline)}</TableCell>
                   <TableCell style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{costume.amount}</TableCell>
                   <TableCell>
                     {costume.image && (

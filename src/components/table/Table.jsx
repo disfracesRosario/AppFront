@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -30,19 +32,36 @@ const List = () => {
   useEffect(() => {
     data.forEach((row) => {
       if (row.costumeStatus === "ALQUILADO" && today > new Date(row.deadlineDate)) {
-        alert(`${alertTitle}: ¡Cuidado! El disfraz ${row.name} alquilado aún no ha sido devuelto!`);
+        toast.error(`¡Cuidado! El disfraz ${row.name} alquilado aún no ha sido devuelto!`, {
+          position: "top-right", // Posición de la notificación
+          autoClose: 5000, // Tiempo de cierre automático en milisegundos (5 segundos en este caso)
+          hideProgressBar: false, // Mostrar barra de progreso
+          closeOnClick: true, // Cerrar al hacer clic en la notificación
+          pauseOnHover: true, // Pausar cierre automático al pasar el cursor
+          draggable: true, // Permitir arrastrar la notificación
+          progress: undefined,
+        });
       } else if (
         row.costumeStatus === "RESERVADO" &&
         today.getTime() + 24 * 60 * 60 * 1000 >
           new Date(row.reservationDate).getTime()
       ) {
-        alert(`${alertTitle}: ¡Alerta! Queda 1 día para retirar el disfraz ${row.name} reservado!`);
+        toast.warning(`¡Alerta! Queda 1 día para retirar el disfraz ${row.name} reservado!`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
     });
   }, [data, today, alertTitle]);
 
   return (
     <>
+      <ToastContainer /> {/* Contenedor de notificaciones */}
       <TextField
         label="Buscar"
         value={searchText}

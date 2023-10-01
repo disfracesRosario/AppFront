@@ -20,6 +20,7 @@ import { useEffect } from "react";
 import { PDFDocument, StandardFonts } from "pdf-lib";
 import SendIcon from '@mui/icons-material/Send';
 import { saveAs } from "file-saver";
+import { useNavigate } from "react-router-dom";
 
 const Datatable = ({ singleId }) => {
   const [selectedDni, setSelectedDni] = useState(null);
@@ -39,6 +40,7 @@ const Datatable = ({ singleId }) => {
   const [newConstant, setNewConstant] = useState(0);
   const [isInvoiceChecked, setIsInvoiceChecked] = useState(false);
   const [partialPaymentAmount, setPartialPaymentAmount] = useState(0);
+  const navigate = useNavigate();
 
   const handleTypeChange = (event) => {
     setType(event.target.value);
@@ -169,8 +171,8 @@ const Datatable = ({ singleId }) => {
 
           // Cargar la imagen de fondo
           const imageUrl =
-            "https://res.cloudinary.com/dkzil7l5p/image/upload/v1686175894/plantillaRemito_edit_2_1_jgbxfz.png"; // URL de la imagen o ruta local
-          const imageBytes = await fetch(imageUrl).then((res) =>
+            "https://res.cloudinary.com/dnoiowgmm/image/upload/v1696116038/plantillaRemito_edit_2_1_jgbxfz_wy22w5.png"; // URL de la imagen o ruta local
+                    const imageBytes = await fetch(imageUrl).then((res) =>
             res.arrayBuffer()
           );
           const backgroundImage = await pdfDoc.embedPng(imageBytes);
@@ -292,7 +294,12 @@ const Datatable = ({ singleId }) => {
 
             // Descargar el PDF en el navegador del usuario
             //COMENTAR CUANDO NO SE QUIERE DESCARGAR PARA PROBAR
-            // saveAs(blob, 'remito.pdf');
+            const currentDateRem = new Date();
+            const formattedDateRem = `${currentDateRem.getDate()}/${currentDateRem.getMonth() + 1}/${currentDateRem.getFullYear()}/
+           ${currentDateRem.getHours()}Hs /  ${currentDateRem.getMinutes()}Min / ${currentDateRem.getSeconds()} Seg`;
+            const fileName = `${responseData.clientName}_${responseData.clientLastName}_${formattedDateRem}_remito.pdf`;
+            saveAs(blob, fileName);
+
 
             setCheckIn([]);
           })
@@ -302,7 +309,8 @@ const Datatable = ({ singleId }) => {
 
         console.log(response.data);
         setCheckIn([]);
-        //alert("Alquiler realizado correctamente")
+        alert("Alquiler realizado correctamente")
+        navigate('/');
         // window.location.href = '/';
       })
       .catch((error) => {

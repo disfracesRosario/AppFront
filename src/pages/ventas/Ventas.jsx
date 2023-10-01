@@ -18,6 +18,7 @@ import { DatePicker, Space } from "antd";
 import { FormControlLabel, Checkbox } from "@material-ui/core";
 import { PDFDocument, StandardFonts } from "pdf-lib";
 import { saveAs } from "file-saver";
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogTitle,
@@ -56,6 +57,7 @@ const Datatable = ({ singleId }) => {
   const [modalShouldOpenWithData, setModalShouldOpenWithData] = useState(false);
   const [requestData, setRequestData] = useState(null);
   const [productQuantities, setProductQuantities] = useState({});
+  const navigate = useNavigate();
 
 
   const handleTypeChange = (event) => {
@@ -200,121 +202,126 @@ const Datatable = ({ singleId }) => {
           requestData
         )
         .then((response) => {
-        const responseData = response.data;
-        console.log(responseData);
-        setOpen(true);  // abre el modal 
+          const responseData = response.data;
+          console.log(responseData);
+          setOpen(true);  // abre el modal 
 
 
-        const remitoData = {
-          id: responseData.id,
-          amount: responseData.amount,
-          type: responseData.type,
-          clientId: responseData.clientId,
-          products: responseData.products,
-          checkIn: responseData.checkIn,
-          clientName: responseData.clientName,
-          clientLastName: responseData.clientLastName,
-          clientAdress: responseData.clientAdress,
-          clientDocument: responseData.clientDocument,
-          transactionDetails: responseData.transactionDetails,
-          billPayment: responseData.billPayment,
-          statusPayment: responseData.statusPayment,
-          clientPhone: responseData.clientPhone,
-        };
+          const remitoData = {
+            id: responseData.id,
+            amount: responseData.amount,
+            type: responseData.type,
+            clientId: responseData.clientId,
+            products: responseData.products,
+            checkIn: responseData.checkIn,
+            clientName: responseData.clientName,
+            clientLastName: responseData.clientLastName,
+            clientAdress: responseData.clientAdress,
+            clientDocument: responseData.clientDocument,
+            transactionDetails: responseData.transactionDetails,
+            billPayment: responseData.billPayment,
+            statusPayment: responseData.statusPayment,
+            clientPhone: responseData.clientPhone,
+          };
 
-        const generateRemitoPDF = async (responseData) => {
-          const pdfDoc = await PDFDocument.create();
-          const page = pdfDoc.addPage([595.28, 841.89]);
-          const { width, height } = page.getSize();
-          const currentDate = new Date();
-          const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1
-            }/${currentDate.getFullYear()}`;
+          const generateRemitoPDF = async (responseData) => {
+            const pdfDoc = await PDFDocument.create();
+            const page = pdfDoc.addPage([595.28, 841.89]);
+            const { width, height } = page.getSize();
+            const currentDate = new Date();
+            const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1
+              }/${currentDate.getFullYear()}`;
 
-          // Cargar la imagen de fondo
-          const imageUrl =
-            "https://res.cloudinary.com/dkzil7l5p/image/upload/v1686175894/plantillaRemito_edit_2_1_jgbxfz.png"; // URL de la imagen o ruta local
-          const imageBytes = await fetch(imageUrl).then((res) =>
-            res.arrayBuffer()
-          );
-          const backgroundImage = await pdfDoc.embedPng(imageBytes);
-          const fontSize = 9;
-          // Agregar contenido al PDF utilizando la biblioteca pdf-lib
-          page.drawImage(backgroundImage, { x: 0, y: 0, width: width, height: height, opacity: 1 });
+            // Cargar la imagen de fondo
+            const imageUrl =
+              "https://res.cloudinary.com/dnoiowgmm/image/upload/v1696116038/plantillaRemito_edit_2_1_jgbxfz_wy22w5.png"; // URL de la imagen o ruta local
+            const imageBytes = await fetch(imageUrl).then((res) =>
+              res.arrayBuffer()
+            );
+            const backgroundImage = await pdfDoc.embedPng(imageBytes);
+            const fontSize = 9;
+            // Agregar contenido al PDF utilizando la biblioteca pdf-lib
+            page.drawImage(backgroundImage, { x: 0, y: 0, width: width, height: height, opacity: 1 });
 
-          const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-          page.setFont(font);
-          page.setFontSize(fontSize);
+            const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+            page.setFont(font);
+            page.setFontSize(fontSize);
 
-          page.drawText(`Fecha: ${formattedDate}`, { x: 370, y: height - 195, fontSize });
-          page.drawText(`Remito N°\n   ${responseData.id}`, { x: 390, y: height - 140, fontSize });
-          page.drawText(`TOTAL : ${responseData.amount}`, { x: 365, y: height - 655, fontSize });
-          page.drawText(`Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`, { x: 100, y: height - 227, fontSize });
-          page.drawText(`DNI: ${responseData.clientDocument}`, { x: 100, y: height - 241, fontSize });
-          page.drawText(`Direccion: ${responseData.clientAdress}`, { x: 100, y: height - 255, fontSize });
-          page.drawText(`Tipo: ${responseData.type}`, { x: 100, y: height - 269, fontSize });
-          page.drawText(`Telefono: ${responseData.clientPhone}`, { x: 100, y: height - 284, fontSize });
-          page.drawText(`identificafdor: ${responseData.clientId}`, { x: 100, y: height - 299, fontSize });
-          page.drawText(`Observaciones:  ${responseData.detail}`, { x: 100, y: height - 670, fontSize });
-          page.drawText("Detalles de la transacción:", { x: 10, y: height - 10, fontSize });
+            page.drawText(`Fecha: ${formattedDate}`, { x: 370, y: height - 195, fontSize });
+            page.drawText(`Remito N°\n   ${responseData.id}`, { x: 390, y: height - 140, fontSize });
+            page.drawText(`TOTAL : ${responseData.amount}`, { x: 365, y: height - 655, fontSize });
+            page.drawText(`Nombre del cliente: ${responseData.clientName} ${responseData.clientLastName}`, { x: 100, y: height - 227, fontSize });
+            page.drawText(`DNI: ${responseData.clientDocument}`, { x: 100, y: height - 241, fontSize });
+            page.drawText(`Direccion: ${responseData.clientAdress}`, { x: 100, y: height - 255, fontSize });
+            page.drawText(`Tipo: ${responseData.type}`, { x: 100, y: height - 269, fontSize });
+            page.drawText(`Telefono: ${responseData.clientPhone}`, { x: 100, y: height - 284, fontSize });
+            page.drawText(`identificafdor: ${responseData.clientId}`, { x: 100, y: height - 299, fontSize });
+            page.drawText(`Observaciones:  ${responseData.detail}`, { x: 100, y: height - 670, fontSize });
+            page.drawText("Detalles de la transacción:", { x: 10, y: height - 10, fontSize });
 
 
 
-          responseData.transactionDetails.forEach((detail, index) => {
-            page.drawText(`${detail.product}`, { x: 170, y: height - 360 - (20 * index), fontSize });
-            page.drawText(`${detail.quantity}`, { x: 320, y: height - 360 - (20 * index), fontSize });
-            page.drawText(`${detail.totalUnitario}`, { x: 365, y: height - 360 - (20 * index), fontSize });
-            page.drawText(`${detail.totalProduct}`, { x: 425, y: height - 360 - (20 * index), fontSize });
-            page.drawText(`${detail.productId}`, { x: 120, y: height - 360 - (20 * index), fontSize });
-          });
+            responseData.transactionDetails.forEach((detail, index) => {
+              page.drawText(`${detail.product}`, { x: 170, y: height - 360 - (20 * index), fontSize });
+              page.drawText(`${detail.quantity}`, { x: 320, y: height - 360 - (20 * index), fontSize });
+              page.drawText(`${detail.totalUnitario}`, { x: 365, y: height - 360 - (20 * index), fontSize });
+              page.drawText(`${detail.totalProduct}`, { x: 425, y: height - 360 - (20 * index), fontSize });
+              page.drawText(`${detail.productId}`, { x: 120, y: height - 360 - (20 * index), fontSize });
+            });
 
-          // Añadir más campos y detalles según sea necesario
+            // Añadir más campos y detalles según sea necesario
 
-          const pdfBytes = await pdfDoc.save();
+            const pdfBytes = await pdfDoc.save();
 
-          return pdfBytes;
-        };
+            return pdfBytes;
+          };
 
-        const generatePDFPreview = async (pdfBytes) => {
-          const pdfDataUri =
-            "data:application/pdf;base64," +
-            btoa(String.fromCharCode(...pdfBytes));
+          const generatePDFPreview = async (pdfBytes) => {
+            const pdfDataUri =
+              "data:application/pdf;base64," +
+              btoa(String.fromCharCode(...pdfBytes));
 
-          const viewer = document.getElementById("pdf-viewer");
-          viewer.src = pdfDataUri;
-        };
+            const viewer = document.getElementById("pdf-viewer");
+            viewer.src = pdfDataUri;
+          };
 
-        // Generar el PDF del remito
-        generateRemitoPDF(responseData)
-          .then((pdfBytes) => {
-            // Generar la vista previa del PDF
-            generatePDFPreview(pdfBytes);
+          // Generar el PDF del remito
+          generateRemitoPDF(responseData)
+            .then((pdfBytes) => {
+              // Generar la vista previa del PDF
+              generatePDFPreview(pdfBytes);
 
-            const blob = new Blob([pdfBytes], { type: "application/pdf" });
+              const blob = new Blob([pdfBytes], { type: "application/pdf" });
 
-            // Descargar el PDF en el navegador del usuario
-            //COMENTAR CUANDO NO SE QUIERE DESCARGAR PARA PROBAR
-            // saveAs(blob, 'remito.pdf');
+              // Descargar el PDF en el navegador del usuario
+              //COMENTAR CUANDO NO SE QUIERE DESCARGAR PARA PROBAR
+              const currentDateRem = new Date();
+              const formattedDateRem = `${currentDateRem.getDate()}/${currentDateRem.getMonth() + 1}/${currentDateRem.getFullYear()}/
+             ${currentDateRem.getHours()}Hs /  ${currentDateRem.getMinutes()}Min / ${currentDateRem.getSeconds()} Seg`;
+              const fileName = `${responseData.clientName}_${responseData.clientLastName}_${formattedDateRem}_remito.pdf`;
+              saveAs(blob, fileName);
 
-            setCheckIn([]);
-          })
-          .catch((error) => {
-            console.log("Error al generar el PDF:", error);
-          });
+              setCheckIn([]);
+            })
+            .catch((error) => {
+              console.log("Error al generar el PDF:", error);
+            });
 
-        // Generar el remito utilizando remitoData
-        console.log("Remito:", remitoData);
+          // Generar el remito utilizando remitoData
+          console.log("Remito:", remitoData);
 
-        setOpen(false);  // cierro el modal una vez terminada la venta
-        setCheckIn([]);
-        alert("Venta realizada correctamente");
-        
-      })
-      .catch((error) => {
-        alert(error.response.data.details);
-        setError(error.response.data.details);
-      });
-  }
-}, [requestData]);
+          setOpen(false);  // cierro el modal una vez terminada la venta
+          setCheckIn([]);
+          alert("Venta realizada correctamente");
+          navigate('/');
+
+        })
+        .catch((error) => {
+          alert(error.response.data.details);
+          setError(error.response.data.details);
+        });
+    }
+  }, [requestData]);
 
   const handleImageUrlChange = (url, clientIdValue) => {
     setImageUrl(url);
@@ -375,8 +382,8 @@ const Datatable = ({ singleId }) => {
       <div className="id"></div>
       <div className="tabla">
         <Productos
-         onCostumeSelect={handleCostumeSelect}
-        selectedQuantities={productQuantities} 
+          onCostumeSelect={handleCostumeSelect}
+          selectedQuantities={productQuantities}
         />
       </div>
       <div className="info"></div>

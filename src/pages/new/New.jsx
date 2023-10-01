@@ -33,10 +33,10 @@ const New = ({ inputs, title, apiUrl }) => {
     setIsUploading(true);
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "qarsntph");
+    formData.append("upload_preset", "kwvolupl"); // Reemplaza "tu_upload_preset" con el nombre de tu upload preset en Cloudinary
     try {
       const res = await axios.post(
-        "https://api.cloudinary.com/v1_1/dkzil7l5p/image/upload",
+        "https://api.cloudinary.com/v1_1/dnoiowgmm/image/upload", // Reemplaza "tu_cloud_name" con el nombre de tu cloud name en Cloudinary
         formData
       );
       setFormData({ ...formData, image: res.data.secure_url });

@@ -28,10 +28,10 @@ const New = ({ inputs, title, apiUrl }) => {
     setIsUploading(true); // Establece el estado de isUploading a true para bloquear el botón de subir imagen
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "qarsntph"); // Reemplaza "tu_upload_preset" con el nombre de tu upload preset en Cloudinary
+    formData.append("upload_preset", "kwvolupl"); // Reemplaza "tu_upload_preset" con el nombre de tu upload preset en Cloudinary
     try {
       const res = await axios.post(
-        "https://api.cloudinary.com/v1_1/dkzil7l5p/image/upload", // Reemplaza "tu_cloud_name" con el nombre de tu cloud name en Cloudinary
+        "https://api.cloudinary.com/v1_1/dnoiowgmm/image/upload", // Reemplaza "tu_cloud_name" con el nombre de tu cloud name en Cloudinary
         formData
       );
       setFormData({ ...formData, image: res.data.secure_url }); // Actualiza el estado del formulario con la URL de la imagen subida
