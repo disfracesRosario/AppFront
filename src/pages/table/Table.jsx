@@ -8,6 +8,21 @@ function ClientHistory() {
   const url = window.location.href;
   const id = url.split("/").pop(); // Obtener la id de la URL actual
 
+  function formatDate(dateString) {
+    // Convierte la cadena de fecha a un objeto Date
+    const date = new Date(dateString);
+  
+    // Obtiene las partes de la fecha (día, mes, año, hora, minutos, segundos)
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // +1 porque los meses van de 0 a 11
+    const year = date.getFullYear();
+    const hours = date.getHours();
+  
+  
+    // Formatea la fecha con separadores (por ejemplo, "dd/mm/yyyy hh:mm:ss")
+    return `${day.toString().padStart(2, "0")}/${month.toString().padStart(2, "0")}/${year}`;
+  }
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,8 +64,8 @@ function ClientHistory() {
                 <td  style={{ padding: "7px 10px" }}>{transaction.amount}</td>
                 <td  style={{ padding: "7px 25px" }}>{transaction.type}</td>
                 <td  style={{ padding: "7px 10px" }}>{transaction.names[0]}</td>
-                <td  style={{ padding: "7px 10px" }}>{transaction.reservationDate}</td>
-                <td  style={{ padding: "7px 10px" }}>{transaction.deadline}</td>
+                <td  style={{ padding: "7px 10px" }}>{formatDate(transaction.reservationDate)}</td>
+                <td  style={{ padding: "7px 10px" }}>{formatDate(transaction.deadline)}</td>
                 <td  style={{ padding: "7px 10px" }}>{transaction.checkIn}</td>
               </tr>
             ))}
